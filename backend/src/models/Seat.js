@@ -1,4 +1,4 @@
-import prisma from "../config/prisma.js";
+import prisma from "../config/database.js";
 import { SEAT_STATUS } from "../config/constants.js";
 
 const Seat = {

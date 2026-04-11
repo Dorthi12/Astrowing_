@@ -1,4 +1,4 @@
-import prisma from "../config/prisma.js";
+import prisma from "../config/database.js";
 
 const Planet = {
   findAll: async (limit = 50, offset = 0) => {
