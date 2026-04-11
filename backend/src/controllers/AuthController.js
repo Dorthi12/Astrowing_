@@ -16,7 +16,17 @@ const AuthController = {
         lastName,
       );
 
-      res.status(HTTP_STATUS.CREATED).json(result);
+      res.cookie("refreshToken", result.tokens.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.status(HTTP_STATUS.CREATED).json({
+        user: result.user,
+        tokens: { accessToken: result.tokens.accessToken },
+      });
     } catch (error) {
       next(error);
     }

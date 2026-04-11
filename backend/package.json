@@ -10,7 +10,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "nodemon server.js",
+    "test": "npx jest",
     "start": "node server.js"
   },
   "dependencies": {
