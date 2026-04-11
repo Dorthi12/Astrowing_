@@ -1,0 +1,1006 @@
+{
+  "planets": [
+    {
+      "id": "p-001",
+      "name": "Earth",
+      "galaxy": "Milky Way",
+      "type": "Terrestrial",
+      "distance": 0,
+      "price": 0,
+      "shortDesc": "The origin point. Classic blue marble.",
+      "color": "from-blue-500 to-green-400",
+      "coordinates": {
+        "x": 44,
+        "y": 50
+      },
+      "risks": {
+        "Radiation": 81,
+        "Gravity": 78,
+        "Storms": 80,
+        "Alien Hostility": 62,
+        "Overall": 75
+      },
+      "compatibility": {
+        "Plasma Entities": 36,
+        "Zorgons": 71
+      },
+      "timeDilation": "1 hour here = 2 Earth days",
+      "lore": "Discovered in the early 2201s, Earth remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Anonymous",
+          "species": "Plasma Entities",
+          "rating": 3,
+          "comment": "Barely survived the gravity crush. Never again."
+        }
+      ],
+      "image": "/planets/p-001.jpg"
+    },
+    {
+      "id": "p-002",
+      "name": "Mars Prime",
+      "galaxy": "Milky Way",
+      "type": "Terraformed",
+      "distance": 8e-06,
+      "price": 1200,
+      "shortDesc": "The red planet, now with 20% more breathable air.",
+      "color": "from-orange-500 to-red-600",
+      "coordinates": {
+        "x": 50,
+        "y": 47
+      },
+      "risks": {
+        "Radiation": 14,
+        "Gravity": 40,
+        "Storms": 34,
+        "Alien Hostility": 21,
+        "Overall": 27
+      },
+      "compatibility": {
+        "Arachnoids": 28,
+        "Silicon-Synths": 86
+      },
+      "timeDilation": "1 hour here = 2 Earth days",
+      "lore": "Discovered in the early 2140s, Mars Prime remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Xylar-9",
+          "species": "Arachnoids",
+          "rating": 1,
+          "comment": "Hostile locals. Got shot at. 1 star."
+        },
+        {
+          "user": "Anonymous",
+          "species": "Arachnoids",
+          "rating": 1,
+          "comment": "Barely survived the gravity crush. Never again."
+        }
+      ],
+      "image": "/planets/p-002.jpg"
+    },
+    {
+      "id": "p-003",
+      "name": "Kepler-186f",
+      "galaxy": "Cygnus",
+      "type": "Super-Earth",
+      "distance": 582,
+      "price": 45000,
+      "shortDesc": "A red dwarf system with heavy gravity.",
+      "color": "from-red-400 to-amber-700",
+      "coordinates": {
+        "x": 80,
+        "y": 85
+      },
+      "risks": {
+        "Radiation": 27,
+        "Gravity": 36,
+        "Storms": 64,
+        "Alien Hostility": 74,
+        "Overall": 50
+      },
+      "compatibility": {
+        "Plasma Entities": 17,
+        "Humans": 95
+      },
+      "timeDilation": "Time flows normally (1:1)",
+      "lore": "Discovered in the early 2162s, Kepler-186f remains one of the most enigmatic locations in the Cygnus sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Humans",
+          "rating": 1,
+          "comment": "Hostile locals. Got shot at. 1 star."
+        },
+        {
+          "user": "Kael",
+          "species": "Humans",
+          "rating": 3,
+          "comment": "Too much radiation for my carbon skin. Great if you wear a lead suit."
+        },
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Zorgons",
+          "rating": 4,
+          "comment": "A majestic world. Traced the ice canyons all day."
+        }
+      ],
+      "image": "/planets/p-003.jpg"
+    },
+    {
+      "id": "p-004",
+      "name": "Aethelgard",
+      "galaxy": "Andromeda",
+      "type": "Oceanic",
+      "distance": 2537000,
+      "price": 120000,
+      "shortDesc": "Endless oceans and floating cities.",
+      "color": "from-cyan-400 to-blue-600",
+      "coordinates": {
+        "x": 15,
+        "y": 25
+      },
+      "risks": {
+        "Radiation": 33,
+        "Gravity": 83,
+        "Storms": 82,
+        "Alien Hostility": 60,
+        "Overall": 64
+      },
+      "compatibility": {
+        "Silicon-Synths": 32,
+        "Zorgons": 94
+      },
+      "timeDilation": "Time is dilated 0.4x",
+      "lore": "Discovered in the early 2143s, Aethelgard remains one of the most enigmatic locations in the Andromeda sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Xylar-9",
+          "species": "Arachnoids",
+          "rating": 3,
+          "comment": "Absolutely mind-bending views of the nebula."
+        }
+      ],
+      "image": "/planets/p-004.jpg"
+    },
+    {
+      "id": "p-005",
+      "name": "Volcania",
+      "galaxy": "Milky Way",
+      "type": "Volcanic",
+      "distance": 45,
+      "price": 8500,
+      "shortDesc": "Mining hub with spectacular lava falls.",
+      "color": "from-red-600 to-yellow-500",
+      "coordinates": {
+        "x": 35,
+        "y": 70
+      },
+      "risks": {
+        "Radiation": 65,
+        "Gravity": 77,
+        "Storms": 34,
+        "Alien Hostility": 45,
+        "Overall": 55
+      },
+      "compatibility": {
+        "Arachnoids": 23,
+        "Zorgons": 93
+      },
+      "timeDilation": "1 hour here = 2 Earth days",
+      "lore": "Discovered in the early 2272s, Volcania remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Anonymous",
+          "species": "Humans",
+          "rating": 5,
+          "comment": "The methane lakes were exquisite. 5 stars."
+        },
+        {
+          "user": "Kael",
+          "species": "Humans",
+          "rating": 5,
+          "comment": "Hostile locals. Got shot at. 1 star."
+        },
+        {
+          "user": "Kael",
+          "species": "Plasma Entities",
+          "rating": 2,
+          "comment": "Too much radiation for my carbon skin. Great if you wear a lead suit."
+        }
+      ],
+      "image": "/planets/p-005.jpg"
+    },
+    {
+      "id": "p-006",
+      "name": "Glacio",
+      "galaxy": "Triangulum",
+      "type": "Ice",
+      "distance": 3200000,
+      "price": 150000,
+      "shortDesc": "Frozen tundra under a purple sky.",
+      "color": "from-blue-200 to-white",
+      "coordinates": {
+        "x": 88,
+        "y": 15
+      },
+      "risks": {
+        "Radiation": 91,
+        "Gravity": 75,
+        "Storms": 48,
+        "Alien Hostility": 47,
+        "Overall": 65
+      },
+      "compatibility": {
+        "Arachnoids": 23,
+        "Plasma Entities": 78
+      },
+      "timeDilation": "1 day here = 3 days on Earth",
+      "lore": "Discovered in the early 2274s, Glacio remains one of the most enigmatic locations in the Triangulum sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Arachnoids",
+          "rating": 3,
+          "comment": "Barely survived the gravity crush. Never again."
+        },
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Plasma Entities",
+          "rating": 3,
+          "comment": "Too much radiation for my carbon skin. Great if you wear a lead suit."
+        }
+      ],
+      "image": "/planets/p-006.jpg"
+    },
+    {
+      "id": "p-007",
+      "name": "Europa Base",
+      "galaxy": "Milky Way",
+      "type": "Moon",
+      "distance": 6.5e-05,
+      "price": 2500,
+      "shortDesc": "Ice crust with a massive subsurface ocean.",
+      "color": "from-blue-100 to-blue-300",
+      "coordinates": {
+        "x": 62,
+        "y": 52
+      },
+      "risks": {
+        "Radiation": 33,
+        "Gravity": 28,
+        "Storms": 61,
+        "Alien Hostility": 55,
+        "Overall": 44
+      },
+      "compatibility": {
+        "Silicon-Synths": 15,
+        "Arachnoids": 83
+      },
+      "timeDilation": "Time flows normally (1:1)",
+      "lore": "Discovered in the early 2289s, Europa Base remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Anonymous",
+          "species": "Plasma Entities",
+          "rating": 3,
+          "comment": "Perfect vacation spot for silicon based lifeforms."
+        },
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Arachnoids",
+          "rating": 1,
+          "comment": "Barely survived the gravity crush. Never again."
+        }
+      ],
+      "image": "/planets/p-007.jpg"
+    },
+    {
+      "id": "p-008",
+      "name": "Titan Outpost",
+      "galaxy": "Milky Way",
+      "type": "Moon",
+      "distance": 0.00013,
+      "price": 3200,
+      "shortDesc": "Liquid methane lakes under a golden haze.",
+      "color": "from-yellow-500 to-orange-400",
+      "coordinates": {
+        "x": 70,
+        "y": 47
+      },
+      "risks": {
+        "Radiation": 18,
+        "Gravity": 48,
+        "Storms": 10,
+        "Alien Hostility": 27,
+        "Overall": 25
+      },
+      "compatibility": {
+        "Zorgons": 16,
+        "Arachnoids": 77
+      },
+      "timeDilation": "1 hour here = 2 Earth days",
+      "lore": "Discovered in the early 2115s, Titan Outpost remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Kael",
+          "species": "Plasma Entities",
+          "rating": 1,
+          "comment": "Absolutely mind-bending views of the nebula."
+        }
+      ],
+      "image": "/planets/p-008.jpg"
+    },
+    {
+      "id": "p-009",
+      "name": "Pluto Station",
+      "galaxy": "Milky Way",
+      "type": "Dwarf Planet",
+      "distance": 0.00061,
+      "price": 4500,
+      "shortDesc": "The famous icy heart of the outer solar system.",
+      "color": "from-slate-300 to-slate-500",
+      "coordinates": {
+        "x": 91,
+        "y": 48
+      },
+      "risks": {
+        "Radiation": 80,
+        "Gravity": 18,
+        "Storms": 34,
+        "Alien Hostility": 94,
+        "Overall": 56
+      },
+      "compatibility": {
+        "Silicon-Synths": 19,
+        "Zorgons": 88
+      },
+      "timeDilation": "Time is dilated 0.4x",
+      "lore": "Discovered in the early 2191s, Pluto Station remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Xylar-9",
+          "species": "Plasma Entities",
+          "rating": 2,
+          "comment": "Perfect vacation spot for silicon based lifeforms."
+        },
+        {
+          "user": "Anonymous",
+          "species": "Silicon-Synths",
+          "rating": 2,
+          "comment": "Deep space isolation at its finest. Highly recommend."
+        }
+      ],
+      "image": "/planets/p-009.jpg"
+    },
+    {
+      "id": "p-010",
+      "name": "Ceres Hub",
+      "galaxy": "Milky Way",
+      "type": "Dwarf Planet",
+      "distance": 2.8e-05,
+      "price": 1800,
+      "shortDesc": "Asteroid belt capital.",
+      "color": "from-gray-400 to-gray-600",
+      "coordinates": {
+        "x": 55,
+        "y": 52
+      },
+      "risks": {
+        "Radiation": 81,
+        "Gravity": 78,
+        "Storms": 80,
+        "Alien Hostility": 62,
+        "Overall": 75
+      },
+      "compatibility": {
+        "Plasma Entities": 36,
+        "Zorgons": 71
+      },
+      "timeDilation": "1 hour here = 2 Earth days",
+      "lore": "Discovered in the early 2201s, Ceres Hub remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Anonymous",
+          "species": "Plasma Entities",
+          "rating": 3,
+          "comment": "Barely survived the gravity crush. Never again."
+        }
+      ],
+      "image": "/planets/p-010.jpg"
+    },
+    {
+      "id": "p-011",
+      "name": "Venus Cloud City",
+      "galaxy": "Milky Way",
+      "type": "Gas/Acid",
+      "distance": 4e-06,
+      "price": 1500,
+      "shortDesc": "Luxurious aerodynamic stations above toxic acid clouds.",
+      "color": "from-yellow-300 to-amber-600",
+      "coordinates": {
+        "x": 38,
+        "y": 48
+      },
+      "risks": {
+        "Radiation": 14,
+        "Gravity": 40,
+        "Storms": 34,
+        "Alien Hostility": 21,
+        "Overall": 27
+      },
+      "compatibility": {
+        "Arachnoids": 28,
+        "Silicon-Synths": 86
+      },
+      "timeDilation": "1 hour here = 2 Earth days",
+      "lore": "Discovered in the early 2140s, Venus Cloud City remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Xylar-9",
+          "species": "Arachnoids",
+          "rating": 1,
+          "comment": "Hostile locals. Got shot at. 1 star."
+        },
+        {
+          "user": "Anonymous",
+          "species": "Arachnoids",
+          "rating": 1,
+          "comment": "Barely survived the gravity crush. Never again."
+        }
+      ],
+      "image": "/planets/p-011.jpg"
+    },
+    {
+      "id": "p-012",
+      "name": "Proxima b",
+      "galaxy": "Centaurus",
+      "type": "Terrestrial",
+      "distance": 4.24,
+      "price": 12000,
+      "shortDesc": "Our closest exoplanet neighbor.",
+      "color": "from-emerald-400 to-teal-600",
+      "coordinates": {
+        "x": 45,
+        "y": 75
+      },
+      "risks": {
+        "Radiation": 27,
+        "Gravity": 36,
+        "Storms": 64,
+        "Alien Hostility": 74,
+        "Overall": 50
+      },
+      "compatibility": {
+        "Plasma Entities": 17,
+        "Humans": 95
+      },
+      "timeDilation": "Time flows normally (1:1)",
+      "lore": "Discovered in the early 2162s, Proxima b remains one of the most enigmatic locations in the Centaurus sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Humans",
+          "rating": 1,
+          "comment": "Hostile locals. Got shot at. 1 star."
+        },
+        {
+          "user": "Kael",
+          "species": "Humans",
+          "rating": 3,
+          "comment": "Too much radiation for my carbon skin. Great if you wear a lead suit."
+        },
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Zorgons",
+          "rating": 4,
+          "comment": "A majestic world. Traced the ice canyons all day."
+        }
+      ],
+      "image": "/planets/p-012.jpg"
+    },
+    {
+      "id": "p-013",
+      "name": "Sirius Prime",
+      "galaxy": "Canis Major",
+      "type": "Gas Giant",
+      "distance": 8.6,
+      "price": 18000,
+      "shortDesc": "Orbiting the brightest star in the sky.",
+      "color": "from-indigo-400 to-purple-600",
+      "coordinates": {
+        "x": 20,
+        "y": 85
+      },
+      "risks": {
+        "Radiation": 33,
+        "Gravity": 83,
+        "Storms": 82,
+        "Alien Hostility": 60,
+        "Overall": 64
+      },
+      "compatibility": {
+        "Silicon-Synths": 32,
+        "Zorgons": 94
+      },
+      "timeDilation": "Time is dilated 0.4x",
+      "lore": "Discovered in the early 2143s, Sirius Prime remains one of the most enigmatic locations in the Canis Major sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Xylar-9",
+          "species": "Arachnoids",
+          "rating": 3,
+          "comment": "Absolutely mind-bending views of the nebula."
+        }
+      ],
+      "image": "/planets/p-013.jpg"
+    },
+    {
+      "id": "p-014",
+      "name": "Trappist-1e",
+      "galaxy": "Aquarius",
+      "type": "Super-Earth",
+      "distance": 39,
+      "price": 28000,
+      "shortDesc": "Part of a seven-planet residential system.",
+      "color": "from-rose-400 to-pink-600",
+      "coordinates": {
+        "x": 10,
+        "y": 55
+      },
+      "risks": {
+        "Radiation": 65,
+        "Gravity": 77,
+        "Storms": 34,
+        "Alien Hostility": 45,
+        "Overall": 55
+      },
+      "compatibility": {
+        "Arachnoids": 23,
+        "Zorgons": 93
+      },
+      "timeDilation": "1 hour here = 2 Earth days",
+      "lore": "Discovered in the early 2272s, Trappist-1e remains one of the most enigmatic locations in the Aquarius sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Anonymous",
+          "species": "Humans",
+          "rating": 5,
+          "comment": "The methane lakes were exquisite. 5 stars."
+        },
+        {
+          "user": "Kael",
+          "species": "Humans",
+          "rating": 5,
+          "comment": "Hostile locals. Got shot at. 1 star."
+        },
+        {
+          "user": "Kael",
+          "species": "Plasma Entities",
+          "rating": 2,
+          "comment": "Too much radiation for my carbon skin. Great if you wear a lead suit."
+        }
+      ],
+      "image": "/planets/p-014.jpg"
+    },
+    {
+      "id": "p-015",
+      "name": "Mercury Prime",
+      "galaxy": "Milky Way",
+      "type": "Terrestrial",
+      "distance": 9e-06,
+      "price": 800,
+      "shortDesc": "Scorched rocky world closest to the Sun.",
+      "color": "from-stone-400 to-stone-600",
+      "coordinates": {
+        "x": 32,
+        "y": 50
+      },
+      "risks": {
+        "Radiation": 91,
+        "Gravity": 75,
+        "Storms": 48,
+        "Alien Hostility": 47,
+        "Overall": 65
+      },
+      "compatibility": {
+        "Arachnoids": 23,
+        "Plasma Entities": 78
+      },
+      "timeDilation": "1 day here = 3 days on Earth",
+      "lore": "Discovered in the early 2274s, Mercury Prime remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Arachnoids",
+          "rating": 3,
+          "comment": "Barely survived the gravity crush. Never again."
+        },
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Plasma Entities",
+          "rating": 3,
+          "comment": "Too much radiation for my carbon skin. Great if you wear a lead suit."
+        }
+      ],
+      "image": "/planets/p-015.jpg"
+    },
+    {
+      "id": "p-016",
+      "name": "Jupiter Station",
+      "galaxy": "Milky Way",
+      "type": "Gas Giant",
+      "distance": 6.6e-05,
+      "price": 2800,
+      "shortDesc": "The biggest gas giant with aggressive storms.",
+      "color": "from-orange-300 to-amber-700",
+      "coordinates": {
+        "x": 62,
+        "y": 48
+      },
+      "risks": {
+        "Radiation": 33,
+        "Gravity": 28,
+        "Storms": 61,
+        "Alien Hostility": 55,
+        "Overall": 44
+      },
+      "compatibility": {
+        "Silicon-Synths": 15,
+        "Arachnoids": 83
+      },
+      "timeDilation": "Time flows normally (1:1)",
+      "lore": "Discovered in the early 2289s, Jupiter Station remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Anonymous",
+          "species": "Plasma Entities",
+          "rating": 3,
+          "comment": "Perfect vacation spot for silicon based lifeforms."
+        },
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Arachnoids",
+          "rating": 1,
+          "comment": "Barely survived the gravity crush. Never again."
+        }
+      ],
+      "image": "/planets/p-016.jpg"
+    },
+    {
+      "id": "p-017",
+      "name": "Saturn Rings",
+      "galaxy": "Milky Way",
+      "type": "Gas Giant",
+      "distance": 0.00013,
+      "price": 3100,
+      "shortDesc": "Breathtaking orbital ring habitats and gas harvesting.",
+      "color": "from-yellow-200 to-orange-300",
+      "coordinates": {
+        "x": 70,
+        "y": 51
+      },
+      "risks": {
+        "Radiation": 18,
+        "Gravity": 48,
+        "Storms": 10,
+        "Alien Hostility": 27,
+        "Overall": 25
+      },
+      "compatibility": {
+        "Zorgons": 16,
+        "Arachnoids": 77
+      },
+      "timeDilation": "1 hour here = 2 Earth days",
+      "lore": "Discovered in the early 2115s, Saturn Rings remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Kael",
+          "species": "Plasma Entities",
+          "rating": 1,
+          "comment": "Absolutely mind-bending views of the nebula."
+        }
+      ],
+      "image": "/planets/p-017.jpg"
+    },
+    {
+      "id": "p-018",
+      "name": "Uranus Outpost",
+      "galaxy": "Milky Way",
+      "type": "Ice Giant",
+      "distance": 0.00028,
+      "price": 4200,
+      "shortDesc": "Tilted ice giant with faint, dark rings.",
+      "color": "from-cyan-200 to-cyan-400",
+      "coordinates": {
+        "x": 77,
+        "y": 46
+      },
+      "risks": {
+        "Radiation": 80,
+        "Gravity": 18,
+        "Storms": 34,
+        "Alien Hostility": 94,
+        "Overall": 56
+      },
+      "compatibility": {
+        "Silicon-Synths": 19,
+        "Zorgons": 88
+      },
+      "timeDilation": "Time is dilated 0.4x",
+      "lore": "Discovered in the early 2191s, Uranus Outpost remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Xylar-9",
+          "species": "Plasma Entities",
+          "rating": 2,
+          "comment": "Perfect vacation spot for silicon based lifeforms."
+        },
+        {
+          "user": "Anonymous",
+          "species": "Silicon-Synths",
+          "rating": 2,
+          "comment": "Deep space isolation at its finest. Highly recommend."
+        }
+      ],
+      "image": "/planets/p-018.jpg"
+    },
+    {
+      "id": "p-019",
+      "name": "Neptune Core",
+      "galaxy": "Milky Way",
+      "type": "Ice Giant",
+      "distance": 0.00045,
+      "price": 4800,
+      "shortDesc": "Deep blue atmosphere with supersonic winds.",
+      "color": "from-blue-600 to-indigo-800",
+      "coordinates": {
+        "x": 84,
+        "y": 52
+      },
+      "risks": {
+        "Radiation": 43,
+        "Gravity": 42,
+        "Storms": 19,
+        "Alien Hostility": 65,
+        "Overall": 42
+      },
+      "compatibility": {
+        "Plasma Entities": 18,
+        "Zorgons": 87
+      },
+      "timeDilation": "1 day here = 3 days on Earth",
+      "lore": "Discovered in the early 2236s, Neptune Core remains one of the most enigmatic locations in the Milky Way sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Silicon-Synths",
+          "rating": 3,
+          "comment": "Barely survived the gravity crush. Never again."
+        },
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Arachnoids",
+          "rating": 3,
+          "comment": "Hostile locals. Got shot at. 1 star."
+        }
+      ],
+      "image": "/planets/p-019.jpg"
+    },
+    {
+      "id": "p-020",
+      "name": "K2-18b",
+      "galaxy": "Leo",
+      "type": "Oceanic",
+      "distance": 124,
+      "price": 25000,
+      "shortDesc": "A habitable-zone water world under a red star.",
+      "color": "from-teal-400 to-blue-600",
+      "coordinates": {
+        "x": 65,
+        "y": 30
+      },
+      "risks": {
+        "Radiation": 14,
+        "Gravity": 40,
+        "Storms": 34,
+        "Alien Hostility": 21,
+        "Overall": 27
+      },
+      "compatibility": {
+        "Arachnoids": 28,
+        "Silicon-Synths": 86
+      },
+      "timeDilation": "1 hour here = 2 Earth days",
+      "lore": "Discovered in the early 2140s, K2-18b remains one of the most enigmatic locations in the Leo sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Xylar-9",
+          "species": "Arachnoids",
+          "rating": 1,
+          "comment": "Hostile locals. Got shot at. 1 star."
+        },
+        {
+          "user": "Anonymous",
+          "species": "Arachnoids",
+          "rating": 1,
+          "comment": "Barely survived the gravity crush. Never again."
+        }
+      ],
+      "image": "/planets/p-020.jpg"
+    },
+    {
+      "id": "p-021",
+      "name": "Vega Colony",
+      "galaxy": "Lyra",
+      "type": "Terrestrial",
+      "distance": 25,
+      "price": 22000,
+      "shortDesc": "Advanced science outposts near the bright star Vega.",
+      "color": "from-blue-100 to-blue-500",
+      "coordinates": {
+        "x": 55,
+        "y": 15
+      },
+      "risks": {
+        "Radiation": 27,
+        "Gravity": 36,
+        "Storms": 64,
+        "Alien Hostility": 74,
+        "Overall": 50
+      },
+      "compatibility": {
+        "Plasma Entities": 17,
+        "Humans": 95
+      },
+      "timeDilation": "Time flows normally (1:1)",
+      "lore": "Discovered in the early 2162s, Vega Colony remains one of the most enigmatic locations in the Lyra sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Humans",
+          "rating": 1,
+          "comment": "Hostile locals. Got shot at. 1 star."
+        },
+        {
+          "user": "Kael",
+          "species": "Humans",
+          "rating": 3,
+          "comment": "Too much radiation for my carbon skin. Great if you wear a lead suit."
+        },
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Zorgons",
+          "rating": 4,
+          "comment": "A majestic world. Traced the ice canyons all day."
+        }
+      ],
+      "image": "/planets/p-021.jpg"
+    },
+    {
+      "id": "p-022",
+      "name": "Orion Nebula Hub",
+      "galaxy": "Orion",
+      "type": "Gas Giant",
+      "distance": 1344,
+      "price": 85000,
+      "shortDesc": "A massive stellar nursery filled with glowing gas.",
+      "color": "from-fuchsia-500 to-pink-700",
+      "coordinates": {
+        "x": 78,
+        "y": 25
+      },
+      "risks": {
+        "Radiation": 33,
+        "Gravity": 83,
+        "Storms": 82,
+        "Alien Hostility": 60,
+        "Overall": 64
+      },
+      "compatibility": {
+        "Silicon-Synths": 32,
+        "Zorgons": 94
+      },
+      "timeDilation": "Time is dilated 0.4x",
+      "lore": "Discovered in the early 2143s, Orion Nebula Hub remains one of the most enigmatic locations in the Orion sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Xylar-9",
+          "species": "Arachnoids",
+          "rating": 3,
+          "comment": "Absolutely mind-bending views of the nebula."
+        }
+      ],
+      "image": "/planets/p-022.jpg"
+    },
+    {
+      "id": "p-023",
+      "name": "Alpha Centauri A",
+      "galaxy": "Centaurus",
+      "type": "Terrestrial",
+      "distance": 4.37,
+      "price": 14000,
+      "shortDesc": "The gateway to the Centauri star system.",
+      "color": "from-yellow-400 to-amber-600",
+      "coordinates": {
+        "x": 40,
+        "y": 28
+      },
+      "risks": {
+        "Radiation": 65,
+        "Gravity": 77,
+        "Storms": 34,
+        "Alien Hostility": 45,
+        "Overall": 55
+      },
+      "compatibility": {
+        "Arachnoids": 23,
+        "Zorgons": 93
+      },
+      "timeDilation": "1 hour here = 2 Earth days",
+      "lore": "Discovered in the early 2272s, Alpha Centauri A remains one of the most enigmatic locations in the Centaurus sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Anonymous",
+          "species": "Humans",
+          "rating": 5,
+          "comment": "The methane lakes were exquisite. 5 stars."
+        },
+        {
+          "user": "Kael",
+          "species": "Humans",
+          "rating": 5,
+          "comment": "Hostile locals. Got shot at. 1 star."
+        },
+        {
+          "user": "Kael",
+          "species": "Plasma Entities",
+          "rating": 2,
+          "comment": "Too much radiation for my carbon skin. Great if you wear a lead suit."
+        }
+      ],
+      "image": "/planets/p-023.jpg"
+    },
+    {
+      "id": "p-024",
+      "name": "Pegasus 51 b",
+      "galaxy": "Pegasus",
+      "type": "Gas Giant",
+      "distance": 50,
+      "price": 45000,
+      "shortDesc": "The first discovered hot Jupiter exoplanet.",
+      "color": "from-red-600 to-orange-800",
+      "coordinates": {
+        "x": 30,
+        "y": 12
+      },
+      "risks": {
+        "Radiation": 91,
+        "Gravity": 75,
+        "Storms": 48,
+        "Alien Hostility": 47,
+        "Overall": 65
+      },
+      "compatibility": {
+        "Arachnoids": 23,
+        "Plasma Entities": 78
+      },
+      "timeDilation": "1 day here = 3 days on Earth",
+      "lore": "Discovered in the early 2274s, Pegasus 51 b remains one of the most enigmatic locations in the Pegasus sector. Deep scans point towards ancient ruins buried beneath the surface, heavily guarded by the planet's intense native climate.",
+      "communityReviews": [
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Arachnoids",
+          "rating": 3,
+          "comment": "Barely survived the gravity crush. Never again."
+        },
+        {
+          "user": "Cmdr. Shepard",
+          "species": "Plasma Entities",
+          "rating": 3,
+          "comment": "Too much radiation for my carbon skin. Great if you wear a lead suit."
+        }
+      ],
+      "image": "/planets/p-024.jpg"
+    }
+  ]
+}
