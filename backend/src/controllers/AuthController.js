@@ -1,6 +1,7 @@
 import { validate, schemas } from "../utils/validators.js";
 import AuthService from "../services/AuthService.js";
 import { HTTP_STATUS } from "../config/constants.js";
+import { verifyRefreshToken } from "../utils/tokenHelper.js";
 
 const AuthController = {
   register: async (req, res, next) => {
@@ -63,10 +64,10 @@ const AuthController = {
         throw error;
       }
 
-      const result = await AuthService.refreshAccessToken(
-        req.userId,
-        refreshToken,
-      );
+      const decoded = verifyRefreshToken(refreshToken);
+      const userId = decoded.userId;
+
+      const result = await AuthService.refreshAccessToken(userId, refreshToken);
       res.json({ tokens: { accessToken: result.accessToken } });
     } catch (error) {
       next(error);
