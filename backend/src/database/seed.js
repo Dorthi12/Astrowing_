@@ -1,131 +1,297 @@
-import db from "../config/database.js";
+import bcrypt from "bcryptjs";
+
+import prisma from "../config/database.js";
 
 const seedData = async () => {
   try {
-    const planets = [
+    console.log("🌍 Starting database seed...");
+
+    // Clear existing data (in reverse order of dependencies)
+    await prisma.payment.deleteMany();
+    await prisma.review.deleteMany();
+    await prisma.bookingSeat.deleteMany();
+    await prisma.booking.deleteMany();
+    await prisma.flight.deleteMany();
+    await prisma.planet.deleteMany();
+    await prisma.user.deleteMany();
+    console.log("🗑️  Cleared existing data");
+
+    // Seed Users
+    const users = await Promise.all([
+      prisma.user.create({
+        data: {
+          email: "john@example.com",
+          password: await bcrypt.hash("password123", 10),
+          firstName: "John",
+          lastName: "Doe",
+          phone: "+1-555-0101",
+        },
+      }),
+      prisma.user.create({
+        data: {
+          email: "jane@example.com",
+          password: await bcrypt.hash("password123", 10),
+          firstName: "Jane",
+          lastName: "Smith",
+          phone: "+1-555-0102",
+        },
+      }),
+      prisma.user.create({
+        data: {
+          email: "alex@example.com",
+          password: await bcrypt.hash("password123", 10),
+          firstName: "Alex",
+          lastName: "Johnson",
+          phone: "+1-555-0103",
+        },
+      }),
+    ]);
+    console.log(`✅ Created ${users.length} users`);
+
+    // Seed Planets
+    const planets = await Promise.all([
+      prisma.planet.create({
+        data: {
+          name: "Zephyr-7",
+          description:
+            "A crystalline wonder with floating cities and aurora skies",
+          imageUrl: "https://via.placeholder.com/400x300?text=Zephyr-7",
+          basePrice: "1200.00",
+          features: ["Aurora Displays", "Crystal Caves", "Zero Gravity Zones"],
+          averageRating: 4.5,
+          totalReviews: 12,
+        },
+      }),
+      prisma.planet.create({
+        data: {
+          name: "Kepler Prime",
+          description:
+            "Ancient ruins and advanced civilization intertwined in harmony",
+          imageUrl: "https://via.placeholder.com/400x300?text=Kepler+Prime",
+          basePrice: "1500.00",
+          features: ["Ancient Ruins", "Tech Hubs", "Museums"],
+          averageRating: 4.8,
+          totalReviews: 25,
+        },
+      }),
+      prisma.planet.create({
+        data: {
+          name: "Proxima Oasis",
+          description:
+            "Lush green planet with vast ecosystems and exotic wildlife",
+          imageUrl: "https://via.placeholder.com/400x300?text=Proxima+Oasis",
+          basePrice: "950.00",
+          features: ["Rainforests", "Safari Tours", "Biodiversity"],
+          averageRating: 4.3,
+          totalReviews: 18,
+        },
+      }),
+      prisma.planet.create({
+        data: {
+          name: "Nova Station",
+          description:
+            "Massive space station hub with entertainment and commerce",
+          imageUrl: "https://via.placeholder.com/400x300?text=Nova+Station",
+          basePrice: "800.00",
+          features: ["Shopping", "Restaurants", "Entertainment"],
+          averageRating: 4.6,
+          totalReviews: 35,
+        },
+      }),
+      prisma.planet.create({
+        data: {
+          name: "Celestia",
+          description:
+            "Paradise planet with pristine beaches and tropical climate",
+          imageUrl: "https://via.placeholder.com/400x300?text=Celestia",
+          basePrice: "2000.00",
+          features: ["Beaches", "Resorts", "Water Sports"],
+          averageRating: 4.9,
+          totalReviews: 42,
+        },
+      }),
+    ]);
+    console.log(`✅ Created ${planets.length} planets`);
+
+    // Seed Flights
+    const flights = [];
+    for (let i = 0; i < 20; i++) {
+      const fromIdx = Math.floor(Math.random() * planets.length);
+      let toIdx = Math.floor(Math.random() * planets.length);
+      while (toIdx === fromIdx) {
+        toIdx = Math.floor(Math.random() * planets.length);
+      }
+
+      const departure = new Date();
+      departure.setDate(
+        departure.getDate() + Math.floor(Math.random() * 30) + 1,
+      );
+      departure.setHours(Math.floor(Math.random() * 20), 0, 0, 0);
+
+      const arrival = new Date(departure);
+      arrival.setHours(arrival.getHours() + Math.floor(Math.random() * 24) + 4);
+
+      const basePrice = (Math.random() * 2000 + 500).toFixed(2);
+
+      const flight = await prisma.flight.create({
+        data: {
+          fromPlanetId: planets[fromIdx].id,
+          toPlanetId: planets[toIdx].id,
+          departureTime: departure,
+          arrivalTime: arrival,
+          totalSeats: 200,
+          availableSeats: Math.floor(Math.random() * 150) + 50,
+          basePrice: basePrice,
+        },
+      });
+      flights.push(flight);
+    }
+    console.log(`✅ Created ${flights.length} flights`);
+
+    // Seed Reviews
+    const reviewsData = [
       {
-        name: "Zephyr-7",
-        description:
-          "A crystalline wonder with floating cities and aurora skies",
-        image_url: "https://via.placeholder.com/400x300?text=Zephyr-7",
-        base_price: 1200,
-        features: JSON.stringify([
-          "Aurora Displays",
-          "Crystal Caves",
-          "Zero Gravity Zones",
-        ]),
+        userId: users[0].id,
+        planetId: planets[0].id,
+        rating: 5,
+        title: "Amazing aurora displays!",
+        content:
+          "The crystal caves were breathtaking and the floating cities are surreal.",
       },
       {
-        name: "Kepler Prime",
-        description:
-          "Ancient ruins and advanced civilization intertwined in harmony",
-        image_url: "https://via.placeholder.com/400x300?text=Kepler+Prime",
-        base_price: 1500,
-        features: JSON.stringify(["Ancient Ruins", "Tech Hubs", "Museums"]),
+        userId: users[1].id,
+        planetId: planets[1].id,
+        rating: 5,
+        title: "Historical and modern blend",
+        content:
+          "Perfect combination of ancient ruins and cutting-edge technology.",
       },
       {
-        name: "Proxima Oasis",
-        description:
-          "Lush green planet with vast ecosystems and exotic wildlife",
-        image_url: "https://via.placeholder.com/400x300?text=Proxima+Oasis",
-        base_price: 950,
-        features: JSON.stringify([
-          "Rainforests",
-          "Safari Tours",
-          "Biodiversity",
-        ]),
+        userId: users[2].id,
+        planetId: planets[2].id,
+        rating: 4,
+        title: "Wildlife paradise",
+        content:
+          "The safari tour was incredible, saw species never documented before.",
       },
       {
-        name: "Nova Station",
-        description:
-          "Massive space station hub with entertainment and commerce",
-        image_url: "https://via.placeholder.com/400x300?text=Nova+Station",
-        base_price: 800,
-        features: JSON.stringify(["Shopping", "Restaurants", "Entertainment"]),
+        userId: users[0].id,
+        planetId: planets[3].id,
+        rating: 4,
+        title: "Great shopping and dining",
+        content: "Nova Station has everything - shops, restaurants, and shows.",
       },
       {
-        name: "Celestia",
-        description:
-          "Paradise planet with pristine beaches and tropical climate",
-        image_url: "https://via.placeholder.com/400x300?text=Celestia",
-        base_price: 2000,
-        features: JSON.stringify(["Beaches", "Resorts", "Water Sports"]),
+        userId: users[1].id,
+        planetId: planets[4].id,
+        rating: 5,
+        title: "Paradise found!",
+        content:
+          "Best vacation spot ever, pristine beaches and perfect weather.",
       },
     ];
 
-    for (const planet of planets) {
-      await db.query(
-        "INSERT INTO planets (name, description, image_url, base_price, features) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (name) DO NOTHING",
-        [
-          planet.name,
-          planet.description,
-          planet.image_url,
-          planet.base_price,
-          planet.features,
-        ],
-      );
+    await Promise.all(
+      reviewsData.map((review) =>
+        prisma.review.create({
+          data: review,
+        }),
+      ),
+    );
+    console.log(`✅ Created ${reviewsData.length} reviews`);
+
+    // Seed Bookings with Booking Seats
+    if (flights.length >= 3) {
+      const booking1 = await prisma.booking.create({
+        data: {
+          userId: users[0].id,
+          flightId: flights[0].id,
+          passengers: 2,
+          totalPrice: "2400.00",
+          status: "confirmed",
+          seats: {
+            create: [
+              { seatNumber: 1, status: "booked" },
+              { seatNumber: 2, status: "booked" },
+            ],
+          },
+        },
+      });
+
+      const booking2 = await prisma.booking.create({
+        data: {
+          userId: users[1].id,
+          flightId: flights[1].id,
+          passengers: 1,
+          totalPrice: "1500.00",
+          status: "pending",
+          seats: {
+            create: [{ seatNumber: 5, status: "booked" }],
+          },
+        },
+      });
+
+      const booking3 = await prisma.booking.create({
+        data: {
+          userId: users[2].id,
+          flightId: flights[2].id,
+          passengers: 3,
+          totalPrice: "3600.00",
+          status: "confirmed",
+          seats: {
+            create: [
+              { seatNumber: 10, status: "booked" },
+              { seatNumber: 11, status: "booked" },
+              { seatNumber: 12, status: "booked" },
+            ],
+          },
+        },
+      });
+
+      console.log(`✅ Created 3 bookings with seats`);
+
+      // Seed Payments
+      await Promise.all([
+        prisma.payment.create({
+          data: {
+            bookingId: booking1.id,
+            userId: users[0].id,
+            amount: "2400.00",
+            method: "stripe",
+            stripePaymentId:
+              "pi_test_" + Math.random().toString(36).substr(2, 9),
+            status: "completed",
+          },
+        }),
+        prisma.payment.create({
+          data: {
+            bookingId: booking2.id,
+            userId: users[1].id,
+            amount: "1500.00",
+            method: "credit_card",
+            status: "pending",
+          },
+        }),
+        prisma.payment.create({
+          data: {
+            bookingId: booking3.id,
+            userId: users[2].id,
+            amount: "3600.00",
+            method: "paypal",
+            status: "completed",
+          },
+        }),
+      ]);
+      console.log(`✅ Created 3 payments`);
     }
 
-    const planetsResult = await db.query("SELECT id FROM planets");
-    const planetIds = planetsResult.rows.map((r) => r.id);
-
-    if (planetIds.length >= 2) {
-      const flights = [];
-      for (let i = 0; i < 20; i++) {
-        const fromIdx = Math.floor(Math.random() * planetIds.length);
-        let toIdx = Math.floor(Math.random() * planetIds.length);
-        while (toIdx === fromIdx) {
-          toIdx = Math.floor(Math.random() * planetIds.length);
-        }
-
-        const departure = new Date();
-        departure.setDate(
-          departure.getDate() + Math.floor(Math.random() * 30) + 1,
-        );
-        departure.setHours(Math.floor(Math.random() * 20), 0, 0, 0);
-
-        const arrival = new Date(departure);
-        arrival.setHours(
-          arrival.getHours() + Math.floor(Math.random() * 24) + 4,
-        );
-
-        flights.push({
-          from_planet_id: planetIds[fromIdx],
-          to_planet_id: planetIds[toIdx],
-          departure_time: departure,
-          arrival_time: arrival,
-          total_seats: 200,
-          available_seats: 200,
-          base_price: (Math.random() * 2000 + 500).toFixed(2),
-        });
-      }
-
-      for (const flight of flights) {
-        await db.query(
-          "INSERT INTO flights (from_planet_id, to_planet_id, departure_time, arrival_time, total_seats, available_seats, base_price) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-          [
-            flight.from_planet_id,
-            flight.to_planet_id,
-            flight.departure_time,
-            flight.arrival_time,
-            flight.total_seats,
-            flight.available_seats,
-            flight.base_price,
-          ],
-        );
-      }
-    }
-
-    console.log("Seed data inserted successfully");
+    console.log("🎉 Database seed completed successfully!");
   } catch (error) {
-    console.error("Seed error:", error);
+    console.error("❌ Seed error:", error);
+    throw error;
+  } finally {
+    await prisma.$disconnect();
   }
 };
 
-if (require.main === module) {
-  seedData().then(() => {
-    process.exit(0);
-  });
-}
-
-export { seedData };
+seedData();

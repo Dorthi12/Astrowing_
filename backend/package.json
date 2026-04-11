@@ -11,7 +11,10 @@
   },
   "scripts": {
     "test": "npx jest",
-    "start": "node server.js"
+    "start": "node server.js",
+    "db:seed": "node src/database/seed.js",
+    "db:migrate": "npx prisma migrate dev",
+    "db:reset": "npx prisma migrate reset"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.7.0",
