@@ -67,9 +67,9 @@ const PlanetCard = ({ planet }) => {
           </div>
         </div>
         
-        <Link to={`/planet/${planet.id}`} className="w-full block text-center py-2.5 text-xs font-bold uppercase tracking-[0.2em] bg-white/5 hover:bg-neon-cyan hover:text-black border border-white/10 hover:border-transparent rounded-lg transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(0,240,255,0.3)]">
+        <div className="w-full block text-center py-2.5 text-xs font-bold uppercase tracking-[0.2em] bg-white/5 group-hover:bg-neon-cyan group-hover:text-black border border-white/10 group-hover:border-transparent rounded-lg transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(0,240,255,0.3)]">
           Initiate Manifest
-        </Link>
+        </div>
       </div>
     </motion.div>
   );
