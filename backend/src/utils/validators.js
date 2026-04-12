@@ -22,8 +22,8 @@ const schemas = {
     content: Joi.string().min(10).max(1000).required(),
   }),
   flightSearch: Joi.object({
-    fromPlanet: Joi.number().required(),
-    toPlanet: Joi.number().required(),
+    fromPlanetId: Joi.number().required(),
+    toPlanetId: Joi.number().required(),
     departureDate: Joi.date().iso().required(),
     passengers: Joi.number().min(1).max(9),
   }),

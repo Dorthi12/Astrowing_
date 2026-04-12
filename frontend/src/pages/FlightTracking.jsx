@@ -1,21 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Rocket, MapPin, Gauge, Shield, Clock, Zap, AlertCircle } from 'lucide-react';
-import { useAppContext } from '../context/AppContext';
-import planetsData from '../data/planets.json';
-import Button from '../components/ui/Button';
+import { useBookingContext } from '../context/BookingContext';
+import { planetService } from '../services';
+import Loader from '../components/ui/Loader';
 
 const FlightTracking = () => {
-  const { id } = useParams(); // Booking ID
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { bookings, spaceWeather } = useAppContext();
+  const { bookings } = useBookingContext();
   
   const booking = bookings.find(b => b.id.toString() === id);
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState('DOCKING');
   const [logs, setLogs] = useState(['Transmitting manifest to sector control...']);
+  const [originPlanet, setOriginPlanet] = useState(null);
+  const [destPlanet, setDestPlanet] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch planet data
+  useEffect(() => {
+    const fetchPlanets = async () => {
+      if (!booking) return;
+      try {
+        const allPlanets = await planetService.getAllPlanets();
+        const planets = allPlanets.planets || [];
+        const origin = planets.find(p => p.id === booking.fromPlanetId);
+        const dest = planets.find(p => p.id === booking.toPlanetId);
+        setOriginPlanet(origin);
+        setDestPlanet(dest);
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Failed to fetch planets:', err);
+        setIsLoading(false);
+      }
+    };
+    fetchPlanets();
+  }, [booking]);
+
+  // Progress simulation
   useEffect(() => {
     if (!booking) return;
 
@@ -50,24 +74,30 @@ const FlightTracking = () => {
     return () => clearInterval(interval);
   }, [booking, status]);
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
   if (!booking) {
     return (
       <div className="container mx-auto py-20 text-center">
-        <h2 className="text-2xl text-white">Flight Link Severed</h2>
-        <Button onClick={() => navigate('/trips')} variant="primary" className="mt-4">Back to Tickets</Button>
+        <h2 className="text-2xl text-white mb-4">Flight Link Severed</h2>
+        <button
+          onClick={() => navigate('/trips')}
+          className="px-6 py-2 bg-neon-cyan text-black rounded-lg font-bold hover:scale-[1.05] transition-all"
+        >
+          Back to Tickets
+        </button>
       </div>
     );
   }
-
-  const destination = planetsData.planets.find(p => p.id === booking.route[booking.route.length - 1]);
-  const origin = planetsData.planets.find(p => p.id === booking.route[0]);
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12 max-w-4xl">
       <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
         <div>
-          <h1 className="text-3xl font-display font-bold text-white mb-2">Flight Track: {booking.id.toString().slice(-6)}</h1>
-          <p className="text-gray-400 font-mono text-sm">EN-ROUTE TO {destination?.name.toUpperCase()}</p>
+          <h1 className="text-3xl font-display font-bold text-white mb-2">Flight Track: #{booking.id}</h1>
+          <p className="text-gray-400 font-mono text-sm">EN-ROUTE TO {destPlanet?.name?.toUpperCase() || 'DESTINATION'}</p>
         </div>
         <div className={`px-4 py-2 rounded-full border flex items-center gap-2 ${status === 'ARRIVED' ? 'bg-green-500/10 border-green-500 text-green-400' : 'bg-neon-cyan/10 border-neon-cyan text-neon-cyan animate-pulse'}`}>
           <Rocket size={16} />
@@ -87,7 +117,7 @@ const FlightTracking = () => {
                 <div className="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-400 flex items-center justify-center text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                   <MapPin size={24} />
                 </div>
-                <span className="text-[10px] uppercase font-bold text-blue-300 font-mono">{origin?.name}</span>
+                <span className="text-[10px] uppercase font-bold text-blue-300 font-mono">{originPlanet?.name || 'ORIGIN'}</span>
               </div>
 
               <div className="flex-1 relative h-px bg-white/10 mx-4">
@@ -110,17 +140,15 @@ const FlightTracking = () => {
                 <div className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-1000 ${progress === 100 ? 'bg-green-500/20 border-green-400 text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.3)]' : 'bg-white/5 border-white/20 text-white/40'}`}>
                   <MapPin size={24} />
                 </div>
-                <span className="text-[10px] uppercase font-bold text-gray-500 font-mono">{destination?.name}</span>
+                <span className="text-[10px] uppercase font-bold text-gray-500 font-mono">{destPlanet?.name || 'DESTINATION'}</span>
               </div>
             </div>
 
-            {/* Weather Overlay */}
-            {spaceWeather.condition !== 'Stable' && (
-              <div className="absolute top-4 right-4 flex items-center gap-2 bg-red-500/20 border border-red-500/50 px-3 py-1 rounded-md text-red-300 text-[10px] font-bold uppercase animate-pulse">
-                <AlertCircle size={12} />
-                {spaceWeather.condition} Detected
-              </div>
-            )}
+            {/* Status Badge */}
+            <div className="absolute top-4 right-4 flex items-center gap-2 bg-neon-cyan/10 border border-neon-cyan/50 px-3 py-1 rounded-md text-neon-cyan text-[10px] font-bold uppercase">
+              <Rocket size={12} />
+              {progress.toFixed(0)}% Complete
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
@@ -159,30 +187,31 @@ const FlightTracking = () => {
           </div>
 
           <div className="glass-panel p-5 rounded-xl border border-white/10">
-            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Space Weather Forecast</h3>
+            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Flight Details</h3>
             <div className="bg-black/40 p-3 rounded-lg border border-white/5 space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-[10px] text-gray-400">Condition</span>
-                <span className={`text-[10px] font-bold ${spaceWeather.condition === 'Stable' ? 'text-green-400' : 'text-red-400'}`}>
-                  {spaceWeather.condition}
-                </span>
+                <span className="text-[10px] text-gray-400">Flight ID</span>
+                <span className="text-[10px] font-bold font-mono text-neon-cyan">#{booking.id}</span>
               </div>
-              <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: `${spaceWeather.intensity}%` }}
-                  className={`h-full ${spaceWeather.intensity > 50 ? 'bg-red-500' : 'bg-emerald-500'}`}
-                />
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] text-gray-400">Passengers</span>
+                <span className="text-[10px] font-bold text-white">{booking.numberOfPassengers || 1}</span>
               </div>
-              <p className="text-[11px] text-gray-300 italic">{spaceWeather.forecast}</p>
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] text-gray-400">Booked Date</span>
+                <span className="text-[10px] font-bold font-mono text-white">{booking.createdAt ? new Date(booking.createdAt).toLocaleDateString() : 'N/A'}</span>
+              </div>
             </div>
           </div>
 
           {status === 'ARRIVED' && (
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
-              <Button onClick={() => navigate('/trips')} variant="primary" className="w-full shadow-[0_0_20px_rgba(0,240,255,0.4)]">
+              <button
+                onClick={() => navigate('/trips')}
+                className="w-full py-3 bg-neon-cyan text-black rounded-lg font-bold uppercase tracking-widest text-sm hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(0,240,255,0.4)]"
+              >
                 Finalize Landing
-              </Button>
+              </button>
             </motion.div>
           )}
         </div>

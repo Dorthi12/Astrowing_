@@ -19,6 +19,8 @@ model User {
   firstName    String?
   lastName     String?
   phone        String?
+  species      String   @default("Humanoid")
+  avatar       String   @default("👽")
   refreshToken String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -26,6 +28,9 @@ model User {
   bookings Booking[]
   reviews  Review[]
   payments Payment[]
+  posts    Post[]
+  likes    Like[]
+  comments Comment[]
 
   @@map("users")
 }
@@ -135,4 +140,49 @@ model Payment {
 
   @@index([bookingId])
   @@map("payments")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  content   String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes    Like[]
+  comments Comment[]
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("posts")
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  postId    Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("likes")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  postId    Int
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@map("comments")
 }

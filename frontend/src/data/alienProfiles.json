@@ -1,0 +1,114 @@
+{
+  "alienProfiles": [
+    {
+      "id": 1,
+      "name": "Zorblax",
+      "species": "Zorgon",
+      "avatar": "👽",
+      "email": "zorblax@zorgon.space",
+      "homeplanet": "Zephyr-7",
+      "bio": "Intergalactic explorer and data enthusiast",
+      "tripsCompleted": 12,
+      "favoriteDestinations": ["Nova Station", "Celestia"]
+    },
+    {
+      "id": 2,
+      "name": "Dave Johnson",
+      "species": "Terran",
+      "avatar": "🧑‍🚀",
+      "email": "human_dave@terra.com",
+      "homeplanet": "Earth",
+      "bio": "Space traveler from planet Earth",
+      "tripsCompleted": 5,
+      "favoriteDestinations": ["Proxima Oasis", "Kepler Prime"]
+    },
+    {
+      "id": 3,
+      "name": "Unit 734",
+      "species": "Silicon-Synth",
+      "avatar": "🤖",
+      "email": "unit734@synthetic.ai",
+      "homeplanet": "Nova Station",
+      "bio": "Advanced AI synthetic lifeform",
+      "tripsCompleted": 8,
+      "favoriteDestinations": ["Kepler Prime", "Zephyr-7"]
+    },
+    {
+      "id": 4,
+      "name": "Kael Nomad",
+      "species": "Kepler",
+      "avatar": "👾",
+      "email": "kael_nomad@explorer.io",
+      "homeplanet": "Kepler Prime",
+      "bio": "Legendary space nomad and adventurer",
+      "tripsCompleted": 15,
+      "favoriteDestinations": ["Proxima Oasis", "Celestia"]
+    },
+    {
+      "id": 5,
+      "name": "Luna Starlight",
+      "species": "Celestian",
+      "avatar": "✨",
+      "email": "luna_starlight@traveler.com",
+      "homeplanet": "Celestia",
+      "bio": "Celestian wanderer seeking cosmic knowledge",
+      "tripsCompleted": 9,
+      "favoriteDestinations": ["Zephyr-7", "Nova Station"]
+    },
+    {
+      "id": 6,
+      "name": "Chad Cosmic",
+      "species": "Nova",
+      "avatar": "🌟",
+      "email": "cosmic_chad@adventure.org",
+      "homeplanet": "Nova Station",
+      "bio": "Thrill-seeker and adventure guide",
+      "tripsCompleted": 20,
+      "favoriteDestinations": ["Proxima Oasis", "Kepler Prime"]
+    },
+    {
+      "id": 7,
+      "name": "Nova Nova",
+      "species": "Station-Born",
+      "avatar": "🛸",
+      "email": "nova_nova@station.net",
+      "homeplanet": "Nova Station",
+      "bio": "Native of the space station, born in zero-g",
+      "tripsCompleted": 11,
+      "favoriteDestinations": ["Celestia", "Zephyr-7"]
+    },
+    {
+      "id": 8,
+      "name": "Zephyr Wind",
+      "species": "Crystal-Being",
+      "avatar": "💎",
+      "email": "zephyr_wind@crystal.com",
+      "homeplanet": "Zephyr-7",
+      "bio": "Sentient crystalline entity from Zephyr",
+      "tripsCompleted": 6,
+      "favoriteDestinations": ["Proxima Oasis"]
+    },
+    {
+      "id": 9,
+      "name": "Oasis Traveler",
+      "species": "Bio-Organic",
+      "avatar": "🌿",
+      "email": "oasis_traveler@nature.bio",
+      "homeplanet": "Proxima Oasis",
+      "bio": "Biologist exploring ecosystems across galaxies",
+      "tripsCompleted": 13,
+      "favoriteDestinations": ["Kepler Prime", "Zephyr-7"]
+    },
+    {
+      "id": 10,
+      "name": "Celestial Vibes",
+      "species": "Energy-Form",
+      "avatar": "⚡",
+      "email": "celestial_vibes@paradise.sky",
+      "homeplanet": "Celestia",
+      "bio": "Pure energy being experiencing physical universe",
+      "tripsCompleted": 7,
+      "favoriteDestinations": ["Nova Station", "Proxima Oasis"]
+    }
+  ]
+}

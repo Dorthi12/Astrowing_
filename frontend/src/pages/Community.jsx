@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, MessageSquare, Share2, Image as ImageIcon, Send, Sparkles } from 'lucide-react';
-import { useAppContext } from '../context/AppContext';
+import { useUserContext } from '../context/UserContext';
 
 const INITIAL_POSTS = [
   {
@@ -45,7 +45,7 @@ const INITIAL_POSTS = [
 ];
 
 const Community = () => {
-    const { currentUser } = useAppContext();
+    const { user, isAuthenticated } = useUserContext();
     const [posts, setPosts] = useState(INITIAL_POSTS);
     const [newPost, setNewPost] = useState("");
     const [likedPosts, setLikedPosts] = useState(new Set());
@@ -70,8 +70,8 @@ const Community = () => {
 
         const post = {
             id: Date.now(),
-            author: currentUser?.name || "Guest_Explorer",
-            species: "Human", // Defaulting for demo
+            author: user?.email?.split('@')[0] || "Guest_Explorer",
+            species: "Terran",
             avatar: "👨‍🚀",
             content: newPost,
             image: null,
@@ -91,7 +91,7 @@ const Community = () => {
             if (p.id === postId) {
                 return {
                     ...p,
-                    comments: [...p.comments, { author: currentUser?.name || "Guest", text: commentText }]
+                    comments: [...p.comments, { author: user?.email?.split('@')[0] || "Guest", text: commentText }]
                 };
             }
             return p;

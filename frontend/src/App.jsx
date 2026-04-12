@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { UserProvider } from './context/UserContext';
+import { BookingProvider } from './context/BookingContext';
 import AppRoutes from './routes/AppRoutes';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -21,7 +23,11 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <UserProvider>
+        <BookingProvider>
+          <AppContent />
+        </BookingProvider>
+      </UserProvider>
     </BrowserRouter>
   );
 }

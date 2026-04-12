@@ -1,12 +1,25 @@
-import React from 'react';
-import { useAppContext } from '../context/AppContext';
+import React, { useEffect } from 'react';
+import { useBookingContext } from '../context/BookingContext';
 import planetsData from '../data/planets.json';
 import { Link } from 'react-router-dom';
-import { CalendarDays, Rocket, MapPin } from 'lucide-react';
+import { CalendarDays, Rocket, MapPin, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Loader from '../components/ui/Loader';
 
 const Trips = () => {
-  const { bookings } = useAppContext();
+  const { bookings, isLoading, error, fetchUserBookings } = useBookingContext();
+
+  useEffect(() => {
+    fetchUserBookings();
+  }, [fetchUserBookings]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl text-white">
@@ -14,6 +27,13 @@ const Trips = () => {
         <h1 className="text-4xl font-display font-bold mb-4">Warp Log & Itineraries</h1>
         <p className="text-gray-400">Review your past and upcoming stellar excursions.</p>
       </div>
+
+      {error && (
+        <div className="glass-panel p-4 border-red-500/30 bg-red-500/10 rounded-lg mb-6 flex gap-3">
+          <AlertCircle size={20} className="text-red-400 shrink-0" />
+          <p className="text-sm text-red-300">{error}</p>
+        </div>
+      )}
 
       {bookings.length === 0 ? (
         <div className="glass-panel p-12 text-center rounded-2xl bg-space-900/50">
@@ -30,14 +50,12 @@ const Trips = () => {
         <div className="space-y-6">
           {[...bookings].reverse().map((booking, idx) => {
             // Support legacy bookings which used {origin, destination} instead of route array
-            const routeArray = booking.route || [booking.origin, booking.destination];
-            const routeNodes = routeArray.map(
-                nodeId => planetsData.planets.find(p => p.id === nodeId) || { name: 'Unknown', galaxy: 'Unknown' }
-            );
+            const originId = booking.fromPlanetId || booking.flightId;
+            const originPlanet = planetsData.planets.find(p => p.id === originId) || { name: 'Unknown', galaxy: 'Unknown' };
             
-            const orig = routeNodes[0];
-            const dest = routeNodes[routeNodes.length - 1];
-            const hasMultipleStops = routeNodes.length > 2;
+            // Format booking details
+            const bookingDate = new Date(booking.createdAt).toLocaleDateString();
+            const departureDate = booking.departureTime ? new Date(booking.departureTime).toLocaleDateString() : 'TBD';
             
             return (
               <motion.div 
@@ -45,56 +63,55 @@ const Trips = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
                 key={booking.id} 
-                className="glass-panel rounded-2xl overflow-hidden relative"
+                className="glass-panel rounded-2xl overflow-hidden relative p-6 border-white/10"
               >
-                {/* Boarding pass accent */}
-                <div className={`absolute left-0 top-0 bottom-0 w-2 ${booking.usedWormhole ? 'bg-neon-purple' : 'bg-neon-cyan'}`}></div>
-                
-                <div className="p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center bg-white/5">
-                  <div className="flex-1 w-full border-b md:border-b-0 md:border-r border-white/10 pb-6 md:pb-0 md:pr-6 whitespace-nowrap">
-                    <span className="block text-xs text-gray-500 uppercase tracking-wider mb-2">Ticketholder</span>
-                    <span className="text-xl font-display font-medium block">{booking.name}</span>
-                    <div className="mt-4 inline-block bg-space-900 border border-white/10 px-3 py-1 rounded text-xs text-gray-400 font-mono">
-                      ID: {booking.id.toString().slice(-8)}
-                    </div>
-                  </div>
-                  
-                  <div className="flex-[2] w-full flex items-center justify-between gap-4">
-                    <div className="text-center shrink-0 max-w-[100px]">
-                      <span className="block text-xl md:text-2xl font-bold font-display truncate" title={orig.name}>{orig.name}</span>
-                      <span className="text-[10px] text-gray-500 uppercase">{orig.galaxy}</span>
-                    </div>
-                    
-                    <div className="flex-1 flex flex-col items-center px-2 py-4 relative group">
-                      <span className="text-[10px] text-gray-400 mb-2 uppercase">
-                        {booking.usedWormhole ? 'Wormhole Jump' : hasMultipleStops ? `${routeNodes.length - 2} Connects` : 'Direct Cruise'}
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                  {/* Booking Info */}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Rocket size={20} className="text-neon-cyan" />
+                      <span className="text-2xl font-bold text-white">Booking #{booking.id}</span>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${
+                        booking.status === 'confirmed' ? 'bg-green-500/20 text-green-400' :
+                        booking.status === 'cancelled' ? 'bg-red-500/20 text-red-400' :
+                        'bg-yellow-500/20 text-yellow-400'
+                      }`}>
+                        {booking.status}
                       </span>
-                      
-                      <div className={`w-full h-0.5 relative ${booking.usedWormhole ? 'bg-neon-purple/50' : 'bg-white/20'} flex items-center justify-evenly`}>
-                        {hasMultipleStops && routeNodes.slice(1, -1).map((node, i) => (
-                           <div key={i} className="w-1.5 h-1.5 rounded-full bg-neon-cyan shrink-0 z-10 shadow-[0_0_5px_#0ff0fc]" title={`Stop: ${node.name}`}></div>
-                        ))}
-                        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-2 rounded-full ${booking.usedWormhole ? 'bg-neon-purple text-white shadow-[0_0_15px_#b026ff]' : 'bg-space-800 border border-white/20'}`}>
-                          <Rocket size={16} className={booking.usedWormhole ? 'animate-pulse' : ''} />
-                        </div>
+                    </div>
+
+                    <div className="space-y-2 text-sm text-gray-300">
+                      <div className="flex items-center gap-2">
+                        <CalendarDays size={16} className="text-gray-500" />
+                        <span>Booked: {bookingDate}</span>
                       </div>
-                      
-                      <span className="text-[10px] text-gray-400 mt-6 md:mt-2 uppercase tracking-wide truncate max-w-full" title={hasMultipleStops ? `Via ${routeNodes.slice(1, -1).map(n => n.name).join(', ')}` : booking.travelClass}>
-                        {hasMultipleStops ? `Via ${routeNodes.slice(1, -1).map(n => n.name).join(', ')}` : booking.travelClass}
-                      </span>
-                    </div>
-                    
-                    <div className="text-center shrink-0 max-w-[100px]">
-                      <span className="block text-xl md:text-2xl font-bold font-display text-white truncate" title={dest.name}>{dest.name}</span>
-                      <span className="text-[10px] text-gray-500 uppercase">{dest.galaxy}</span>
+                      <div className="flex items-center gap-2">
+                        <CalendarDays size={16} className="text-gray-500" />
+                        <span>Departure: {departureDate}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MapPin size={16} className="text-gray-500" />
+                        <span>{originPlanet.name}</span>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="flex-1 w-full md:text-right border-t md:border-t-0 md:border-l border-white/10 pt-6 md:pt-0 md:pl-6">
-                    <span className="block text-xs text-gray-500 uppercase tracking-wider mb-1">Departure</span>
-                    <span className="block text-lg mb-4">{booking.date}</span>
-                    <span className="block text-xs text-gray-500 uppercase tracking-wider mb-1">Fare</span>
-                    <span className="text-xl font-mono text-white">{booking.price === 0 ? 'Complimentary' : `₡${booking.price.toLocaleString()}`}</span>
+
+                  {/* Booking Details */}
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div className="bg-black/40 rounded-lg p-3">
+                      <div className="text-2xl font-bold text-neon-cyan">{booking.passengers}</div>
+                      <div className="text-xs text-gray-400 mt-1">Passengers</div>
+                    </div>
+                    <div className="bg-black/40 rounded-lg p-3">
+                      <div className="text-2xl font-bold text-neon-purple">${booking.totalPrice.toFixed(2)}</div>
+                      <div className="text-xs text-gray-400 mt-1">Total Price</div>
+                    </div>
+                    <Link
+                      to={`/tracking/${booking.id}`}
+                      className="bg-neon-cyan/10 hover:bg-neon-cyan hover:text-black border border-neon-cyan text-neon-cyan rounded-lg p-3 flex items-center justify-center transition-all"
+                    >
+                      <span className="text-xs font-bold uppercase">Track</span>
+                    </Link>
                   </div>
                 </div>
               </motion.div>

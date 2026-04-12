@@ -1,15 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Fingerprint, ScanEye, Biohazard, Activity, ShieldCheck, Zap } from 'lucide-react';
-import { useAppContext } from '../context/AppContext';
+import { Fingerprint, ScanEye, Biohazard, Activity, ShieldCheck, Zap, AlertCircle } from 'lucide-react';
+import { useUserContext } from '../context/UserContext';
 
 const AlienAuth = () => {
-    const { currentUser, updateDNA } = useAppContext();
+    const { login, register, isLoading, error, clearError } = useUserContext();
     const [authMode, setAuthMode] = useState('login');
     const [isAnimating, setIsAnimating] = useState(false);
     const [phase, setPhase] = useState('input'); // input, validating, flying
     const [formError, setFormError] = useState('');
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        species: 'humanoid',
+    });
     const canvasRef = useRef(null);
     const navigate = useNavigate();
 
@@ -180,6 +187,8 @@ const AlienAuth = () => {
                     
                     if (landP > 0.9) {
                         setFormError("ORBIT STABILIZED. WELCOME HOME.");
+                        // Navigate after animation completes
+                        setTimeout(() => navigate('/'), 500);
                     }
                 } else {
                     navigate('/');
@@ -288,11 +297,33 @@ const AlienAuth = () => {
         };
     }, [isAnimating, navigate]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setPhase('validating');
-        setIsAnimating(true);
-        // Navigation is now handled exclusively by the cinematic engine's timeline
+        clearError();
+        setFormError('');
+        
+        try {
+            setPhase('validating');
+            setIsAnimating(true);
+            
+            if (authMode === 'login') {
+                await login(formData.email, formData.password);
+            } else {
+                await register(
+                    formData.email,
+                    formData.password,
+                    formData.firstName,
+                    formData.lastName
+                );
+            }
+            
+            // Success - animation will complete and navigate
+            // The animation timeline will handle the navigation
+        } catch (err) {
+            setIsAnimating(false);
+            setPhase('input');
+            setFormError(err?.error || err?.message || 'Authentication failed');
+        }
     };
 
     return (
@@ -356,26 +387,37 @@ const AlienAuth = () => {
 
                             {/* Form */}
                             <form className="space-y-5" onSubmit={handleSubmit}>
+                                {(formError || error) && (
+                                    <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex gap-3">
+                                        <AlertCircle size={16} className="text-red-400 shrink-0 mt-0.5" />
+                                        <span className="text-sm text-red-300">{formError || error}</span>
+                                    </div>
+                                )}
+
                                 <div className="space-y-2">
                                     <label className="text-[10px] text-gray-400 font-mono flex items-center gap-2 uppercase">
-                                        <Fingerprint size={12} className="text-green-500" /> Entity Identifier
+                                        <Fingerprint size={12} className="text-green-500" /> Entity Identifier (Email)
                                     </label>
                                     <input 
-                                        type="text" 
+                                        type="email" 
                                         required
-                                        placeholder="EX: XENON_734"
+                                        placeholder="explorer@starport.com"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({...formData, email: e.target.value})}
                                         className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white font-mono text-sm focus:outline-none focus:border-green-500/50 focus:bg-black/60 transition-all"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
                                     <label className="text-[10px] text-gray-400 font-mono flex items-center gap-2 uppercase">
-                                        <Biohazard size={12} className="text-green-500" /> Neural Access Key
+                                        <Biohazard size={12} className="text-green-500" /> Neural Access Key (Password)
                                     </label>
                                     <input 
                                         type="password" 
                                         required
                                         placeholder="••••••••••••"
+                                        value={formData.password}
+                                        onChange={(e) => setFormData({...formData, password: e.target.value})}
                                         className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-green-400 font-mono text-sm focus:outline-none focus:border-green-500/50 focus:bg-black/60 transition-all tracking-widest"
                                     />
                                 </div>
@@ -386,21 +428,41 @@ const AlienAuth = () => {
                                         animate={{ opacity: 1, height: 'auto' }}
                                         className="space-y-4 pt-4 border-t border-white/5"
                                     >
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] text-gray-400 font-mono flex items-center gap-2 uppercase">
+                                                    <Activity size={12} className="text-green-500" /> First Name
+                                                </label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="Explorer"
+                                                    value={formData.firstName}
+                                                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                                                    className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white font-mono text-xs focus:outline-none focus:border-green-500/50 focus:bg-black/60 transition-all"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] text-gray-400 font-mono flex items-center gap-2 uppercase">
+                                                    <Activity size={12} className="text-green-500" /> Last Name
+                                                </label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="Cosmic"
+                                                    value={formData.lastName}
+                                                    onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                                                    className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white font-mono text-xs focus:outline-none focus:border-green-500/50 focus:bg-black/60 transition-all"
+                                                />
+                                            </div>
+                                        </div>
+
                                         <div className="space-y-2">
                                             <label className="text-[10px] text-gray-400 font-mono flex items-center gap-2 uppercase">
                                                 <Activity size={12} className="text-green-500" /> Biological Group
                                             </label>
                                             <select 
+                                                value={formData.species}
+                                                onChange={(e) => setFormData({...formData, species: e.target.value})}
                                                 className="w-full bg-black/60 border border-white/20 rounded-xl p-4 text-white font-mono text-xs focus:outline-none focus:border-green-500 shadow-inner cursor-pointer"
-                                                onChange={(e) => {
-                                                    const species = e.target.value;
-                                                    let rad = 40; let traits = [];
-                                                    if(species === 'plasma') { rad = 95; traits = ['Energy-Based', 'Luminous']; }
-                                                    else if(species === 'silicon') { rad = 20; traits = ['Extreme Pressure', 'Cold Resistant']; }
-                                                    else if(species === 'synthetic') { rad = 100; traits = ['Crystalline Logic', 'Radio-Immune']; }
-                                                    else { traits = ['Oxygen-Dependent', 'Carbon-Based']; }
-                                                    updateDNA?.({ species, radiationTolerance: rad, traits });
-                                                }}
                                             >
                                                 <option value="humanoid">Humanoid</option>
                                                 <option value="plasma">Plasma Entity</option>
@@ -408,29 +470,25 @@ const AlienAuth = () => {
                                                 <option value="synthetic">Synthetic Intel</option>
                                             </select>
                                         </div>
-
-                                        <div className="bg-green-500/5 border border-green-500/20 p-4 rounded-xl">
-                                            <div className="flex items-center justify-between mb-3">
-                                                <span className="text-[10px] text-green-500 font-mono font-bold uppercase">DNA Biomarkers</span>
-                                                <Zap size={10} className="text-green-500 animate-pulse" />
-                                            </div>
-                                            <div className="flex flex-wrap gap-2">
-                                                {currentUser?.dna?.traits?.map(t => (
-                                                    <span key={t} className="text-[9px] bg-green-500/10 text-green-300 px-2 py-0.5 rounded-md border border-green-500/30 font-mono uppercase">
-                                                        {t}
-                                                    </span>
-                                                )) || <span className="text-[9px] text-gray-600 font-mono">WAITING FOR SAMPLE...</span>}
-                                            </div>
-                                        </div>
                                     </motion.div>
                                 )}
 
                                 <button 
                                     type="submit"
-                                    className="w-full py-4 bg-green-500 text-black rounded-xl font-bold uppercase tracking-[0.2em] text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(34,197,94,0.3)] hover:shadow-[0_0_50px_rgba(34,197,94,0.5)] flex items-center justify-center gap-3 mt-6"
+                                    disabled={isLoading}
+                                    className="w-full py-4 bg-green-500 text-black rounded-xl font-bold uppercase tracking-[0.2em] text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(34,197,94,0.3)] hover:shadow-[0_0_50px_rgba(34,197,94,0.5)] flex items-center justify-center gap-3 mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    <ShieldCheck size={18} />
-                                    {authMode === 'login' ? 'Initiate Scan' : 'Register Traits'}
+                                    {isLoading ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-t-black border-r-black border-b-transparent border-l-transparent rounded-full animate-spin" />
+                                            Processing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <ShieldCheck size={18} />
+                                            {authMode === 'login' ? 'Initiate Scan' : 'Register Traits'}
+                                        </>
+                                    )}
                                 </button>
                             </form>
 

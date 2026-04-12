@@ -13,14 +13,14 @@ const BookingService = {
       throw error;
     }
 
-    if (flight.available_seats < passengers) {
+    if (flight.availableSeats < passengers) {
       const error = new Error("Not enough available seats");
       error.statusCode = HTTP_STATUS.BAD_REQUEST;
       error.code = "INSUFFICIENT_SEATS";
       throw error;
     }
 
-    const totalPrice = flight.base_price * passengers;
+    const totalPrice = parseFloat(flight.basePrice) * passengers;
 
     const booking = await Booking.create(
       userId,
@@ -40,7 +40,7 @@ const BookingService = {
 
   getBooking: async (userId, bookingId) => {
     const booking = await Booking.findById(bookingId);
-    if (!booking || booking.user_id !== userId) {
+    if (!booking || booking.userId !== userId) {
       const error = new Error(ERRORS.NOT_FOUND);
       error.statusCode = HTTP_STATUS.NOT_FOUND;
       error.code = "BOOKING_NOT_FOUND";

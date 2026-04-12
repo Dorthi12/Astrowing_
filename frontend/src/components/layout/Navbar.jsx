@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Compass, Map, Rocket, User, CalendarDays, Users } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Compass, Map, Rocket, User, CalendarDays, Users, LogOut } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useUserContext } from '../../context/UserContext';
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const navLinks = [
     { name: 'Home', path: '/', icon: <Rocket size={18} /> },
@@ -57,9 +61,50 @@ const Navbar = () => {
           <Link to="/book" className="ml-4 px-6 py-2 rounded-full border border-neon-purple text-neon-purple font-medium text-sm tracking-wider uppercase hover:bg-neon-purple hover:text-white transition-all duration-300 shadow-[0_0_10px_rgba(176,38,255,0.2)] hover:shadow-[0_0_20px_rgba(176,38,255,0.6)]">
             Book Travel
           </Link>
-          <Link to="/auth" className="w-9 h-9 flex-shrink-0 rounded-full bg-green-500/10 border border-green-500/50 flex items-center justify-center text-green-400 hover:bg-green-500 hover:text-black hover:shadow-[0_0_15px_#22c55e] transition-all duration-300" title="Entity Recognition">
-            <User size={16} />
-          </Link>
+
+          {/* User Menu */}
+          {isAuthenticated && user ? (
+            <div className="relative">
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="ml-4 w-10 h-10 flex-shrink-0 rounded-full bg-neon-cyan/10 border border-neon-cyan/50 flex items-center justify-center text-neon-cyan hover:bg-neon-cyan hover:text-black transition-all duration-300 shadow-[0_0_10px_rgba(0,240,255,0.2)] hover:shadow-[0_0_15px_rgba(0,240,255,0.4)]"
+                title={user.email}
+              >
+                <User size={16} />
+              </button>
+
+              <AnimatePresence>
+                {showUserMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 mt-2 w-48 bg-black/90 border border-white/10 rounded-xl py-2 shadow-xl z-50"
+                  >
+                    <div className="px-4 py-2 border-b border-white/10">
+                      <p className="text-xs text-gray-400 uppercase tracking-widest">Account</p>
+                      <p className="text-sm text-white font-medium truncate">{user.email}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setShowUserMenu(false);
+                        navigate('/auth');
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors"
+                    >
+                      <LogOut size={14} />
+                      Logout
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <Link to="/auth" className="ml-4 px-6 py-2 rounded-full border border-green-500/50 bg-green-500/10 text-green-400 font-medium text-sm tracking-wider uppercase hover:bg-green-500 hover:text-black transition-all duration-300 shadow-[0_0_10px_rgba(34,197,94,0.2)] hover:shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+              Login
+            </Link>
+          )}
         </nav>
 
         {/* Mobile Toggle */}
@@ -90,13 +135,27 @@ const Navbar = () => {
               <span className={location.pathname === link.path ? 'text-neon-cyan' : 'text-white'}>{link.name}</span>
             </Link>
           ))}
-          <div className="mx-6 mt-6 flex gap-4">
-            <Link to="/book" onClick={() => setIsOpen(false)} className="flex-[3] py-3 rounded-full bg-neon-purple/20 border border-neon-purple text-center text-white tracking-wider font-medium uppercase shadow-[0_0_15px_rgba(176,38,255,0.3)]">
+          <div className="mx-6 mt-6 flex flex-col gap-4">
+            <Link to="/book" onClick={() => setIsOpen(false)} className="w-full py-3 rounded-full bg-neon-purple/20 border border-neon-purple text-center text-white tracking-wider font-medium uppercase shadow-[0_0_15px_rgba(176,38,255,0.3)]">
               Book Travel
             </Link>
-            <Link to="/auth" onClick={() => setIsOpen(false)} className="flex-[1] flex items-center justify-center py-3 rounded-full bg-green-500/20 border border-green-500 text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
-              <User size={20} />
-            </Link>
+            {isAuthenticated && user ? (
+              <button
+                onClick={() => {
+                  logout();
+                  setIsOpen(false);
+                  navigate('/auth');
+                }}
+                className="w-full py-3 rounded-full bg-red-500/20 border border-red-500 text-red-400 text-center tracking-wider font-medium uppercase shadow-[0_0_15px_rgba(239,68,68,0.3)] flex items-center justify-center gap-2"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            ) : (
+              <Link to="/auth" onClick={() => setIsOpen(false)} className="w-full py-3 rounded-full bg-green-500/20 border border-green-500 text-green-400 text-center tracking-wider font-medium uppercase shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                Login
+              </Link>
+            )}
           </div>
         </motion.div>
       )}

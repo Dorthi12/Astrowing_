@@ -41,7 +41,7 @@ const FlightController = {
 
   searchFlights: async (req, res, next) => {
     try {
-      const { fromPlanet, toPlanet, departureDate, passengers } = validate(
+      const { fromPlanetId, toPlanetId, departureDate, passengers } = validate(
         schemas.flightSearch,
         req.query,
       );
@@ -50,8 +50,8 @@ const FlightController = {
       const offset = parseInt(req.query.offset) || 0;
 
       const flights = await Flight.search(
-        fromPlanet,
-        toPlanet,
+        fromPlanetId,
+        toPlanetId,
         departureDate,
         limit,
         offset,
