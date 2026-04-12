@@ -2,9 +2,20 @@ import prisma from "../config/database.js";
 
 const User = {
   findByEmail: async (email) => {
-    return prisma.user.findUnique({
+    console.log("[User] 🔍 Finding user by email:", email);
+    const result = await prisma.user.findUnique({
       where: { email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        firstName: true,
+        lastName: true,
+        refreshToken: true,
+      },
     });
+    console.log("[User] Result:", result ? "User found" : "User NOT found");
+    return result;
   },
 
   findById: async (userId) => {
@@ -22,14 +33,25 @@ const User = {
   },
 
   create: async (email, passwordHash, firstName, lastName) => {
-    return prisma.user.create({
-      data: {
-        email,
-        password: passwordHash,
-        firstName,
-        lastName,
-      },
-    });
+    console.log("[User] 💾 Creating user:", { email, firstName, lastName });
+    try {
+      const result = await prisma.user.create({
+        data: {
+          email,
+          password: passwordHash,
+          firstName,
+          lastName,
+        },
+      });
+      console.log("[User] ✅ User created successfully:", {
+        id: result.id,
+        email: result.email,
+      });
+      return result;
+    } catch (error) {
+      console.error("[User] ❌ Error creating user:", error.message);
+      throw error;
+    }
   },
 
   updateRefreshToken: async (userId, refreshToken) => {

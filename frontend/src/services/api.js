@@ -13,23 +13,41 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
+    console.log(`[API] ${config.method.toUpperCase()} ${config.url}`, {
+      hasToken: !!token,
+    });
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => {
+    console.error("[API] Request error:", error);
+    return Promise.reject(error);
+  },
 );
 
 // Response interceptor - Handle token refresh & errors
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log(
+      `[API] ✓ Response: ${response.config.method.toUpperCase()} ${response.config.url}`,
+      response.status,
+    );
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
+    console.error(
+      `[API] ✗ Error: ${error.config?.method?.toUpperCase()} ${error.config?.url}`,
+      error.response?.status,
+      error.message,
+    );
 
     // Handle 401 Unauthorized - try to refresh token
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+      console.log("[API] 401 detected, attempting token refresh...");
 
       try {
         const response = await axios.post(
@@ -40,15 +58,24 @@ api.interceptors.response.use(
 
         const { tokens } = response.data;
         localStorage.setItem("accessToken", tokens.accessToken);
+        console.log("[API] Token refreshed successfully");
 
         // Retry original request with new token
         originalRequest.headers.Authorization = `Bearer ${tokens.accessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
-        // Refresh failed - clear auth and redirect to login
+        // Refresh failed - clear auth and let the app handle redirect
+        console.error("[API] Token refresh failed, clearing auth");
         localStorage.removeItem("accessToken");
         localStorage.removeItem("user");
-        window.location.href = "/auth";
+
+        // Redirect using window location only as last resort
+        if (window.location.pathname !== "/auth") {
+          console.log("[API] Redirecting to /auth");
+          setTimeout(() => {
+            window.location.href = "/auth";
+          }, 100);
+        }
         return Promise.reject(refreshError);
       }
     }

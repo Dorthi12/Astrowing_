@@ -6,6 +6,7 @@ import { verifyRefreshToken } from "../utils/tokenHelper.js";
 const AuthController = {
   register: async (req, res, next) => {
     try {
+      console.log("[AuthController] Register request:", req.body.email);
       const { email, password, firstName, lastName } = validate(
         schemas.userRegister,
         req.body,
@@ -16,6 +17,7 @@ const AuthController = {
         firstName,
         lastName,
       );
+      console.log("[AuthController] Register success for:", email);
 
       res.cookie("refreshToken", result.tokens.refreshToken, {
         httpOnly: true,
@@ -29,14 +31,17 @@ const AuthController = {
         tokens: { accessToken: result.tokens.accessToken },
       });
     } catch (error) {
+      console.error("[AuthController] Register error:", error.message);
       next(error);
     }
   },
 
   login: async (req, res, next) => {
     try {
+      console.log("[AuthController] Login request:", req.body.email);
       const { email, password } = validate(schemas.userLogin, req.body);
       const result = await AuthService.login(email, password);
+      console.log("[AuthController] Login success for:", email);
 
       res.cookie("refreshToken", result.tokens.refreshToken, {
         httpOnly: true,
@@ -50,6 +55,7 @@ const AuthController = {
         tokens: { accessToken: result.tokens.accessToken },
       });
     } catch (error) {
+      console.error("[AuthController] Login error:", error.message);
       next(error);
     }
   },

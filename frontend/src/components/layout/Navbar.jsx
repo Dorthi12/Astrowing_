@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Compass, Map, Rocket, User, CalendarDays, Users, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,6 +10,7 @@ const Navbar = () => {
   const { user, isAuthenticated, logout } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const menuRef = useRef(null);
 
   const navLinks = [
     { name: 'Home', path: '/', icon: <Rocket size={18} /> },
@@ -18,6 +19,22 @@ const Navbar = () => {
     { name: 'My Trips', path: '/trips', icon: <CalendarDays size={18} /> },
     { name: 'Holo-Net', path: '/community', icon: <Users size={18} /> }
   ];
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowUserMenu(false);
+      }
+    };
+
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [showUserMenu]);
 
   return (
     <header className="fixed top-0 w-full z-50 glass-panel border-b-white/10 rounded-none rounded-b-xl border-x-0 border-t-0 shadow-none bg-space-900/60 transition-all duration-300">
@@ -64,7 +81,7 @@ const Navbar = () => {
 
           {/* User Menu */}
           {isAuthenticated && user ? (
-            <div className="relative">
+            <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
                 className="ml-4 w-10 h-10 flex-shrink-0 rounded-full bg-neon-cyan/10 border border-neon-cyan/50 flex items-center justify-center text-neon-cyan hover:bg-neon-cyan hover:text-black transition-all duration-300 shadow-[0_0_10px_rgba(0,240,255,0.2)] hover:shadow-[0_0_15px_rgba(0,240,255,0.4)]"

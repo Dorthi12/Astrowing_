@@ -11,20 +11,24 @@ const authService = {
    */
   register: async (email, password, firstName, lastName) => {
     try {
+      console.log("[AuthService] Calling register endpoint...");
       const response = await api.post("/auth/register", {
         email,
         password,
         firstName,
         lastName,
       });
+      console.log("[AuthService] Register response:", response.data);
       const { user, tokens } = response.data;
 
       // Store access token
       localStorage.setItem("accessToken", tokens.accessToken);
       localStorage.setItem("user", JSON.stringify(user));
+      console.log("[AuthService] Tokens stored in localStorage");
 
       return { user, tokens };
     } catch (error) {
+      console.error("[AuthService] Register error:", error);
       throw error.response?.data || error.message;
     }
   },
@@ -37,18 +41,22 @@ const authService = {
    */
   login: async (email, password) => {
     try {
+      console.log("[AuthService] Calling login endpoint...");
       const response = await api.post("/auth/login", {
         email,
         password,
       });
+      console.log("[AuthService] Login response:", response.data);
       const { user, tokens } = response.data;
 
       // Store access token (refresh token stored in httpOnly cookie automatically)
       localStorage.setItem("accessToken", tokens.accessToken);
       localStorage.setItem("user", JSON.stringify(user));
+      console.log("[AuthService] Tokens stored in localStorage");
 
       return { user, tokens };
     } catch (error) {
+      console.error("[AuthService] Login error:", error);
       throw error.response?.data || error.message;
     }
   },

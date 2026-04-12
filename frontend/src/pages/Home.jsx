@@ -4,8 +4,19 @@ import { motion } from 'framer-motion';
 import Button from '../components/ui/Button';
 import { Rocket, ArrowRight, ShieldCheck } from 'lucide-react';
 import DepartureBoard from '../components/departure/DepartureBoard';
+import { useUserContext } from '../context/UserContext';
 
 const Home = () => {
+  const { isAuthenticated, user } = useUserContext();
+  
+  React.useEffect(() => {
+    console.log('[Home] 📍 Component mounted, isAuthenticated:', isAuthenticated, 'user:', user?.email);
+  }, []);
+
+  React.useEffect(() => {
+    console.log('[Home] isAuthenticated changed to:', isAuthenticated);
+  }, [isAuthenticated]);
+
   return (
     <div className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center pb-20">
       {/* Central glowing orb */}

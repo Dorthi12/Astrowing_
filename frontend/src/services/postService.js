@@ -105,6 +105,30 @@ const postService = {
       throw error.response?.data || error.message;
     }
   },
+
+  /**
+   * Upload image to Cloudinary via backend
+   * @param {File} file - Image file
+   * @returns {Promise} { imageUrl, publicId }
+   */
+  uploadImage: async (file) => {
+    try {
+      console.log("[PostService] Uploading image:", file.name);
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await api.post("/posts/upload/image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("[PostService] Image uploaded:", response.data.imageUrl);
+      return response.data;
+    } catch (error) {
+      console.error("[PostService] Error uploading image:", error);
+      throw error.response?.data || error.message;
+    }
+  },
 };
 
 export default postService;

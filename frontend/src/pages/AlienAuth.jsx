@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Fingerprint, ScanEye, Biohazard, Activity, ShieldCheck, Zap, AlertCircle } from 'lucide-react';
 import { useUserContext } from '../context/UserContext';
+import { authService } from '../services';
 
 const AlienAuth = () => {
-    const { login, register, isLoading, error, clearError } = useUserContext();
+    const { login, register, isLoading, error, clearError, refreshAuthState } = useUserContext();
     const [authMode, setAuthMode] = useState('login');
     const [isAnimating, setIsAnimating] = useState(false);
     const [phase, setPhase] = useState('input'); // input, validating, flying
@@ -18,7 +19,26 @@ const AlienAuth = () => {
         species: 'humanoid',
     });
     const canvasRef = useRef(null);
+    const isAnimatingRef = useRef(false);
+    const animationStartedRef = useRef(false);  // Track if animation was ever started
     const navigate = useNavigate();
+
+    // Keep ref in sync with state using callback to avoid re-render spiral
+    useEffect(() => {
+        isAnimatingRef.current = isAnimating;
+        if (isAnimating) {
+            animationStartedRef.current = true;
+        }
+        console.log('[Auth] isAnimating state changed to:', isAnimating, '| ref now:', isAnimatingRef.current, '| animationStarted:', animationStartedRef.current);
+    }, [isAnimating]);
+
+    // Debug: Track component mount/unmount
+    useEffect(() => {
+        console.log('[AlienAuth] 📍 Component mounted');
+        return () => {
+            console.log('[AlienAuth] 📍 Component unmounting');
+        };
+    }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -48,9 +68,15 @@ const AlienAuth = () => {
 
         let ship = { x: width/2, y: height + 100, scale: 0.1 };
         let tick = 0;
+        let frameCount = 0;
 
         const render = () => {
-            if (isAnimating) tick++;
+            frameCount++;
+            if (frameCount % 60 === 0) {
+                console.log('[Canvas] 🎬 Animation running: frameCount=', frameCount, 'tick=', tick, 'isAnimatingRef.current=', isAnimatingRef.current);
+            }
+            
+            if (isAnimatingRef.current) tick++;
             
             ctx.fillStyle = '#020205';
             ctx.fillRect(0, 0, width, height);
@@ -60,7 +86,7 @@ const AlienAuth = () => {
             let radialWarp = false;
 
             // ANIMATION PHASES - EXTENDED SHORT FILM
-            if (isAnimating) {
+            if (isAnimatingRef.current) {
                 if (tick < 100) {
                     if (phase !== 'validating') setPhase('validating');
                     speedY = 1.5; 
@@ -186,11 +212,24 @@ const AlienAuth = () => {
                     ctx.globalAlpha = 1;
                     
                     if (landP > 0.9) {
+                        console.log('[Auth Animation] 🎬 Landing sequence complete! landP:', landP);
                         setFormError("ORBIT STABILIZED. WELCOME HOME.");
+                        console.log('[Auth Animation] 🚀 Triggering redirect to home in 500ms...');
+                        console.log('[Auth Animation] checking isAnimatingRef:', isAnimatingRef.current);
+                        console.log('[Auth Animation] tick:', tick, 'landP:', landP);
                         // Navigate after animation completes
-                        setTimeout(() => navigate('/'), 500);
+                        setTimeout(() => {
+                            console.log('[Auth Animation] ⏱️ Timeout fired, about to call refreshAuthState...');
+                            refreshAuthState();
+                            console.log('[Auth Animation] ⏱️ refreshAuthState called, now calling navigate("/")');
+                            navigate('/');
+                            console.log('[Auth Animation] ⏱️ navigate("/") was called');
+                        }, 500);
                     }
                 } else {
+                    console.log('[Auth Animation] ⏱️ Animation complete, tick:', tick);
+                    console.log('[Auth Animation] ⏱️ Calling refreshAuthState before navigate...');
+                    refreshAuthState();
                     navigate('/');
                     return;
                 }
@@ -240,7 +279,7 @@ const AlienAuth = () => {
             }
 
             // SHIP DRAWING - HIGH DETAIL V2
-            if (isAnimating && !radialWarp) {
+            if (isAnimatingRef.current && !radialWarp) {
                 ctx.save();
                 ctx.translate(ship.x, ship.y);
                 ctx.scale(ship.scale, ship.scale);
@@ -289,40 +328,69 @@ const AlienAuth = () => {
         };
 
         window.addEventListener('resize', handleResize);
+        console.log('[Canvas] 🎬 Render loop starting, calling render()');
         render();
 
         return () => {
             cancelAnimationFrame(frameId);
             window.removeEventListener('resize', handleResize);
         };
-    }, [isAnimating, navigate]);
+    }, [navigate, refreshAuthState]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         clearError();
         setFormError('');
         
+        console.log(`[Auth] 📱 Starting ${authMode}...`);
+        console.log(`[Auth] Credentials:`, { email: formData.email });
+        
         try {
+            console.log('[Auth] 1️⃣ Setting animation to true...');
             setPhase('validating');
             setIsAnimating(true);
+            console.log('[Auth] Animation started, calling backend...');
+            console.log('[Auth] isAnimatingRef.current after setIsAnimating:', isAnimatingRef.current);
             
+            let result;
             if (authMode === 'login') {
-                await login(formData.email, formData.password);
+                console.log('[Auth] 2️⃣ Calling login API directly (not context)...');
+                result = await authService.login(formData.email, formData.password);
+                console.log('[Auth] Login successful:', result);
             } else {
-                await register(
+                console.log('[Auth] 2️⃣ Calling register API directly (not context)...');
+                result = await authService.register(
                     formData.email,
                     formData.password,
                     formData.firstName,
                     formData.lastName
                 );
+                console.log('[Auth] Registration successful:', result);
             }
             
-            // Success - animation will complete and navigate
-            // The animation timeline will handle the navigation
+            // Verify tokens are stored
+            const storedToken = localStorage.getItem('accessToken');
+            const storedUser = localStorage.getItem('user');
+            console.log('[Auth] 3️⃣ Tokens stored:', !!storedToken, '| User stored:', !!storedUser);
+            console.log('[Auth] isAnimating state:', isAnimating, '| isAnimatingRef.current:', isAnimatingRef.current);
+            
+            if (!storedToken) {
+                throw new Error('Token not stored after authentication');
+            }
+            
+            console.log('[Auth] 4️⃣ ✅ Authentication complete! Animation will handle redirect...');
+            console.log('[Auth] DO NOT updating UserContext yet - let animation complete first');
+            // SUCCESS - DO NOT update UserContext here!
+            // Animation will call navigate('/'), which will take user to Home
+            // Home/other pages will trigger UserContext to reload auth state from localStorage
         } catch (err) {
+            console.error('[Auth] ❌ Full error object:', err);
+            console.log('[Auth] Error - stopping animation and returning to form');
             setIsAnimating(false);
             setPhase('input');
-            setFormError(err?.error || err?.message || 'Authentication failed');
+            const errorMsg = err?.error || err?.message || err?.response?.data?.error || 'Authentication failed';
+            setFormError(errorMsg);
+            console.error('Auth error:', errorMsg);
         }
     };
 
@@ -368,6 +436,14 @@ const AlienAuth = () => {
                                 <h1 className="text-3xl font-display font-bold text-white mb-2 tracking-[0.1em]">STARPORT <span className="text-green-400">PASSPORT</span></h1>
                                 <p className="text-[10px] text-gray-400 uppercase tracking-[0.3em] font-mono">Terminal Authentication v2.84</p>
                             </div>
+
+                            {/* Debug Info - TEMPORARY */}
+                            {(formError || error) && (
+                                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3 mb-4 text-xs text-yellow-300">
+                                    <p className="font-mono">Phase: {phase} | Animating: {isAnimating ? 'true' : 'false'}</p>
+                                    <p className="font-mono">API: {import.meta.env.VITE_API_BASE_URL}</p>
+                                </div>
+                            )}
 
                             {/* Mode Toggle */}
                             <div className="flex bg-black/40 p-1 rounded-xl border border-white/5 mb-8">

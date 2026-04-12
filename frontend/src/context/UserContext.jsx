@@ -13,19 +13,25 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const checkExistingSession = () => {
       try {
+        console.log('[UserContext] 🔍 Checking existing session from localStorage...');
         const storedUser = authService.getStoredUser();
         const token = localStorage.getItem('accessToken');
         
+        console.log('[UserContext] 📦 Found in localStorage - token:', !!token, 'user:', !!storedUser, 'email:', storedUser?.email);
+        
         if (storedUser && token) {
+          console.log('[UserContext] ✅ Session found! Setting authenticated state...');
           setUser(storedUser);
           setIsAuthenticated(true);
         } else {
+          console.log('[UserContext] ❌ No session found in localStorage');
           setIsAuthenticated(false);
         }
       } catch (err) {
-        console.error('Session check error:', err);
+        console.error('[UserContext] ❌ Session check error:', err);
         setIsAuthenticated(false);
       } finally {
+        console.log('[UserContext] ✅ Session check complete, setting isLoading to false');
         setIsLoading(false);
       }
     };
@@ -44,15 +50,16 @@ export const UserProvider = ({ children }) => {
         firstName,
         lastName
       );
+      // Ensure user data is set before marking as authenticated
       setUser(newUser);
       setIsAuthenticated(true);
+      setIsLoading(false);
       return newUser;
     } catch (err) {
       const errorMessage = err?.error || err?.message || 'Registration failed';
       setError(errorMessage);
-      throw err;
-    } finally {
       setIsLoading(false);
+      throw err;
     }
   }, []);
 
@@ -62,15 +69,16 @@ export const UserProvider = ({ children }) => {
     setError(null);
     try {
       const { user: loginUser } = await authService.login(email, password);
+      // Ensure user data is set before marking as authenticated
       setUser(loginUser);
       setIsAuthenticated(true);
+      setIsLoading(false);
       return loginUser;
     } catch (err) {
       const errorMessage = err?.error || err?.message || 'Login failed';
       setError(errorMessage);
-      throw err;
-    } finally {
       setIsLoading(false);
+      throw err;
     }
   }, []);
 
@@ -82,9 +90,12 @@ export const UserProvider = ({ children }) => {
       await authService.logout();
       setUser(null);
       setIsAuthenticated(false);
+      setIsLoading(false);
     } catch (err) {
       console.error('Logout error:', err);
-    } finally {
+      // Still clear local state even if logout API fails
+      setUser(null);
+      setIsAuthenticated(false);
       setIsLoading(false);
     }
   }, []);
@@ -109,6 +120,20 @@ export const UserProvider = ({ children }) => {
     setError(null);
   }, []);
 
+  // Refresh auth state from localStorage (for when tokens are stored externally)
+  const refreshAuthState = useCallback(() => {
+    console.log('[UserContext] 🔄 refreshAuthState called - reading localStorage...');
+    const storedUser = authService.getStoredUser();
+    const token = localStorage.getItem('accessToken');
+    console.log('[UserContext] 📦 After refresh - token:', !!token, 'user:', !!storedUser, 'email:', storedUser?.email);
+    
+    if (storedUser && token) {
+      console.log('[UserContext] ✅ Tokens found! Setting authenticated state...');
+      setUser(storedUser);
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   const value = {
     user,
     isAuthenticated,
@@ -117,6 +142,7 @@ export const UserProvider = ({ children }) => {
     register,
     login,
     logout,
+    refreshAuthState,
     updateUserProfile,
     clearError,
   };

@@ -57,12 +57,12 @@ const PlanetCard = ({ planet }) => {
           </div>
           <div>
             <span className="block text-[8px] text-gray-500 uppercase font-bold mb-1">Distance</span>
-            <span className="text-[10px] text-gray-300 font-mono">{planet.distance === 0 ? '0' : planet.distance.toLocaleString()} LY</span>
+            <span className="text-[10px] text-gray-300 font-mono">{(planet.distance ?? 0) === 0 ? '0' : (planet.distance || 0).toLocaleString()} LY</span>
           </div>
           <div>
             <span className="block text-[8px] text-gray-500 uppercase font-bold mb-1">Base Fare</span>
             <span className="text-neon-purple font-mono font-bold">
-              {planet.price === 0 ? 'FREE' : `₡${planet.price.toLocaleString()}`}
+              {(planet.price ?? 0) === 0 ? 'FREE' : `₡${(planet.price || 0).toLocaleString()}`}
             </span>
           </div>
         </div>
