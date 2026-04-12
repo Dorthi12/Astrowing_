@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import planetsData from '../data/planets.json';
 import routesData from '../data/routes.json';
-import { useNavigate } from 'react-router-dom';
-import { Share2, MapPin, Navigation } from 'lucide-react';
+import { Share2, MapPin, Navigation, Zap, X, Ticket, CheckCircle, Wallet, Rocket } from 'lucide-react';
+import { getCheapestPath } from '../utils/dijkstra';
+import BookingModalWrapper from '../components/booking/BookingModalWrapper';
 
 const MapView = () => {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
-  const navigate = useNavigate();
+  const [bookingTarget, setBookingTarget] = useState(null);
+  const [dijkstraResult, setDijkstraResult] = useState(null);
+  const [highlightedPath, setHighlightedPath] = useState([]);
   const [stars, setStars] = useState([]);
   const [constellations, setConstellations] = useState([]);
 
@@ -65,15 +68,30 @@ const MapView = () => {
 
   const calculateRouteDistance = () => {
     if (!origin || !destination) return 0;
-    // Dijkstra could be here, but for display we just show absolute distance difference
-    // or exact if it's a direct edge
     const directEdge = routesData.edges.find(e => 
         (e.source === origin.id && e.target === destination.id) || 
         (e.source === destination.id && e.target === origin.id)
     );
     if (directEdge) return directEdge.distanceLY;
-    return parseFloat(Math.abs(origin.distance - destination.distance).toFixed(3)) || 1250;
+    return parseFloat(Math.abs((origin.distance || 0) - (destination.distance || 0)).toFixed(3)) || 1250;
   };
+
+  // Run Dijkstra whenever origin & destination are set
+  useEffect(() => {
+    if (origin && destination) {
+      const result = getCheapestPath(origin.id, destination.id);
+      setDijkstraResult(result);
+      setHighlightedPath(result.found ? result.path : []);
+    } else {
+      setDijkstraResult(null);
+      setHighlightedPath([]);
+    }
+  }, [origin, destination]);
+
+  const handleInitBooking = useCallback(() => {
+    if (!destination) return;
+    setBookingTarget(destination);
+  }, [destination]);
 
   return (
     <div className="relative w-full h-[calc(100vh-80px)] overflow-hidden bg-[#02050a] flex items-center justify-center">
@@ -167,16 +185,31 @@ const MapView = () => {
         </div>
 
         {origin && destination && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 pt-4 border-t border-white/10 text-center">
-             <div className="text-xs uppercase text-gray-500 mb-1">Total Distance (Est.)</div>
-             <div className="text-2xl font-bold font-display text-white mb-4">
-               {calculateRouteDistance()} LY
-             </div>
-             <button 
-                onClick={() => navigate(`/book?orig=${origin.id}&dest=${destination.id}`)}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 pt-4 border-t border-white/10">
+             <div className="text-xs uppercase text-gray-500 mb-1">Est. Distance</div>
+             <div className="text-xl font-bold font-display text-white mb-2">{calculateRouteDistance()} LY</div>
+             {dijkstraResult && (
+               <div className={`p-3 rounded-lg mb-3 text-xs font-mono ${
+                 dijkstraResult.found
+                   ? 'bg-green-500/10 border border-green-500/30 text-green-400'
+                   : 'bg-red-500/10 border border-red-500/30 text-red-400'
+               }`}>
+                 {dijkstraResult.found ? (
+                   <>
+                     <div className="flex items-center gap-2 mb-1"><Zap size={12} /> Cheapest Route (Dijkstra)</div>
+                     <div className="text-lg font-bold">₡{dijkstraResult.totalCost?.toLocaleString()}</div>
+                     <div className="text-[9px] text-gray-400 mt-1">{dijkstraResult.path.length} waypoints</div>
+                   </>
+                 ) : (
+                   <div>No route found between these sectors.</div>
+                 )}
+               </div>
+             )}
+             <button
+                onClick={handleInitBooking}
                 className="w-full py-3 text-sm font-medium uppercase tracking-wider bg-neon-cyan/20 hover:bg-neon-cyan/30 text-neon-cyan border border-neon-cyan shadow-[0_0_10px_rgba(0,240,255,0.2)] rounded transition-colors flex justify-center items-center gap-2"
               >
-                <Navigation size={16} /> Init Travel Sequence
+                <Navigation size={16} /> Book This Route
              </button>
           </motion.div>
         )}
@@ -278,6 +311,17 @@ const MapView = () => {
           );
         })}
       </div>
+
+      {/* Booking Modal — triggered when a route is selected */}
+      <AnimatePresence>
+        {bookingTarget && (
+          <BookingModalWrapper
+            planet={bookingTarget}
+            dijkstraCost={dijkstraResult?.found ? dijkstraResult.totalCost : null}
+            onClose={() => setBookingTarget(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

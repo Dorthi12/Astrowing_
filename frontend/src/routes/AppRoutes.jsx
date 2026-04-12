@@ -44,11 +44,7 @@ const AppRoutes = () => {
           <Booking />
         </ProtectedRoute>
       } />
-      <Route path="/trips" element={
-        <ProtectedRoute>
-          <Trips />
-        </ProtectedRoute>
-      } />
+      <Route path="/trips" element={<Trips />} />
       <Route path="/tracking/:id" element={
         <ProtectedRoute>
           <FlightTracking />
