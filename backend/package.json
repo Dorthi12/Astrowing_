@@ -57,7 +57,7 @@
     "ci-info": "^3.9.0",
     "cjs-module-lexer": "^1.4.3",
     "cliui": "^8.0.1",
-    "cloudinary": "^2.9.0",
+    "cloudinary": "^1.41.0",
     "co": "^4.6.0",
     "collect-v8-coverage": "^1.0.3",
     "color-convert": "^2.0.1",
